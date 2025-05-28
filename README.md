@@ -1,3 +1,2 @@
 # game-match
-Game Match
-asdasdasdasd
+O Game Match é uma rede social de gamers! 

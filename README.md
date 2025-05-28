@@ -22,4 +22,6 @@ Na Game Match, a diversidade é a nossa força. Não importa o seu estilo de jog
 Mais do que uma plataforma de conexão, a Game Match é uma comunidade vibrante. Venha fazer parte dessa família de gamers, onde a diversão é garantida e novas amizades estão sempre à espera. 🥳
 
 **Conecte-se. Jogue. Faça Amigos. Junte-se à Game Match hoje mesmo!** 🚀🔥
-![image](https://github.com/user-attachments/assets/52c8097f-22d8-4fd6-9271-e1455657e4bb)
+![image](https://github.com/user-attachments/assets/2cb17156-90bd-4e68-a79b-a8e2c744fc23)
+![image](https://github.com/user-attachments/assets/b9d1fc48-f40d-4307-ada1-04342f0ac704)
+

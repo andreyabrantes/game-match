@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game Match - Home</title>
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rajdhani:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      color: #e0e0e0;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://preview.redd.it/made-remix-a-new-steam-deck-wallpaper-4k-v0-gjtaf4sztwtc1.png?width=640&crop=smart&auto=webp&s=61d43c5bf4e8c2ae4568f758c94f68dfd6b4188b') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #7b2ff7, #a463f2);
+      width: 100%;
+      max-width: 1200px;
+      border-radius: 15px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 0 20px #7b2ff7aa;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      color: #f0e6ff;
+      text-shadow: 0 0 10px #a463f2, 0 0 30px #7b2ff7;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      font-size: 1.25rem;
+      color: #d1c4f9;
+      letter-spacing: 1.2px;
+    }
+
+    .games-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .game-card {
+      background: #121212;
+      border-radius: 20px;
+      box-shadow: 0 0 10px #7b2ff7aa, inset 0 0 15px #5d00b8aa;
+      width: 280px;
+      height: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .game-card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px #a463f2, inset 0 0 20px #7b2ff7;
+      border: 2px solid #a463f2;
+    }
+
+    .game-card img {
+      width: 100%;
+      height: 160px;
+      border-radius: 15px;
+      object-fit: cover;
+      box-shadow: 0 0 15px #7b2ff7cc;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 5px #7b2ff7);
+      transition: filter 0.3s ease;
+      background: #111;
+    }
+
+    .game-card:hover img {
+      filter: drop-shadow(0 0 12px #a463f2);
+    }
+
+    .game-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: #e5d9f2;
+      margin-bottom: 12px;
+      text-shadow: 0 0 5px #7b2ff7;
+      text-align: center;
+    }
+
+    .game-card p {
+      font-size: 1rem;
+      color: #bdb2ff;
+      margin-bottom: 25px;
+      flex-grow: 1;
+      text-align: center;
+      padding: 0 5px;
+    }
+
+    .game-card button {
+      background: linear-gradient(135deg, #7b2ff7, #a463f2);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 12px 35px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #7b2ff7aa;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card button:hover {
+      background: linear-gradient(135deg, #9e5dff, #c38fff);
+      box-shadow: 0 0 25px #c38fffcc;
+    }
+
+    .game-card button::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: pulse 2s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.4;
+      }
+
+      50% {
+        transform: scale(1);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: scale(0.8);
+        opacity: 0.4;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .games-section {
+        gap: 20px;
+      }
+
+      .game-card {
+        width: 90vw;
+        height: auto;
+      }
+
+      .game-card img {
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sons -->
+  <audio id="hoverSound" src="https://freesound.org/data/previews/522/522142_11227343-lq.mp3" preload="auto"></audio>
+  <audio id="clickSound" src="https://freesound.org/data/previews/341/341695_5121236-lq.mp3" preload="auto"></audio>
+  <audio id="backgroundMusic"
+    src="https://cdn.pixabay.com/download/audio/2022/02/20/audio_07cba7d96c.mp3?filename=relaxing-gaming-background-music-7517.mp3"
+    loop preload="auto"></audio>
+  <audio id="startSound" src="https://freesound.org/data/previews/341/341695_5121236-lq.mp3" preload="auto"></audio>
+  <audio id="keySound" src="https://freesound.org/data/previews/458/458344_5121236-lq.mp3" preload="auto"></audio>
+
+  <div class="header">
+    <h1>Bem-vindo ao Game Match!</h1>
+    <p>Aqui estão os jogos mais populares do momento!</p>
+  </div>
+
+  <div class="games-section">
+    <!-- (Seus cards continuam aqui como já estavam, sem alterações) -->
+    <!-- Cards omitidos por brevidade — mantenha os que já estão no seu código -->
+  </div>
+
+  <script>
+    const hoverSound = document.getElementById('hoverSound');
+    const clickSound = document.getElementById('clickSound');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const startSound = document.getElementById('startSound');
+    const keySound = document.getElementById('keySound');
+
+    window.addEventListener('load', () => {
+      backgroundMusic.volume = 0.2;
+      backgroundMusic.play().catch(() => {
+        console.log('Música de fundo aguardando interação do usuário.');
+      });
+      startSound.volume = 0.3;
+      startSound.play();
+    });
+
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        hoverSound.currentTime = 0;
+        hoverSound.play();
+      });
+    });
+
+    document.querySelectorAll('.game-card button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      });
+      btn.addEventListener('mouseenter', () => {
+        keySound.currentTime = 0;
+        keySound.play();
+      });
+    });
+
+    // Controle de música
+    const musicBtn = document.createElement('button');
+    musicBtn.innerText = '🎵 Música';
+    musicBtn.style = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #7b2ff7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #a463f2;
+      z-index: 1000;
+    `;
+    document.body.appendChild(musicBtn);
+
+    let isPlaying = true;
+    musicBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        backgroundMusic.pause();
+        musicBtn.innerText = '🔇 Música';
+      } else {
+        backgroundMusic.play();
+        musicBtn.innerText = '🎵 Música';
+      }
+      isPlaying = !isPlaying;
+    });
+  </script>
+</body>
+
+</html>

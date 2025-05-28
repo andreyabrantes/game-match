@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GAME MATCH | NEXT-GEN GAMING PLATFORM</title>
+    
+    <!-- Fontes high-tech -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cyber: {
+                primary: '#00f0ff',
+                secondary: '#ff00f0',
+                dark: '#0a0a20',
+                accent: '#00ff87',
+              },
+              matrix: '#00ff41',
+            },
+            fontFamily: {
+              orbitron: ['Orbitron', 'sans-serif'],
+              rajdhani: ['Rajdhani', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+    
+    <style>
+      :root {
+        --neon-primary: #00f0ff;
+        --neon-secondary: #ff00f0;
+        --neon-accent: #00ff87;
+        --dark-bg: #0a0a20;
+      }
+      
+      body {
+        background-color: var(--dark-bg);
+        background-image: 
+          radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.15) 0%, transparent 20%),
+          radial-gradient(circle at 80% 70%, rgba(255, 0, 240, 0.15) 0%, transparent 20%);
+        font-family: 'Rajdhani', sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      
+      .cyber-glass {
+        background: rgba(10, 10, 32, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 8px;
+        border: 1px solid rgba(0, 240, 255, 0.2);
+        box-shadow: 
+          0 0 15px rgba(0, 240, 255, 0.3),
+          0 0 30px rgba(255, 0, 240, 0.2);
+      }
+      
+      .cyber-input {
+        background: rgba(0, 240, 255, 0.05);
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        color: white;
+        transition: all 0.3s ease;
+      }
+      
+      .cyber-input:focus {
+        outline: none;
+        border-color: var(--neon-primary);
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        background: rgba(0, 240, 255, 0.1);
+      }
+      
+      .cyber-btn {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+      }
+      
+      .cyber-btn-primary {
+        background: linear-gradient(45deg, var(--neon-primary), var(--neon-accent));
+        color: black;
+      }
+      
+      .cyber-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 240, 255, 0.4);
+      }
+      
+      .cyber-btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.5s;
+      }
+      
+      .cyber-btn-primary:hover::before {
+        left: 100%;
+      }
+      
+      .neon-text {
+        text-shadow: 
+          0 0 5px var(--neon-primary),
+          0 0 10px var(--neon-primary),
+          0 0 20px var(--neon-primary);
+      }
+      
+      .neon-text-secondary {
+        text-shadow: 
+          0 0 5px var(--neon-secondary),
+          0 0 10px var(--neon-secondary);
+      }
+      
+      .scanline {
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .scanline::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          transparent 0%,
+          rgba(0, 240, 255, 0.05) 50%,
+          transparent 100%
+        );
+        animation: scan 8s linear infinite;
+        pointer-events: none;
+      }
+      
+      @keyframes scan {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(100%); }
+      }
+      
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes pulse {
+        0% { opacity: 0.8; }
+        50% { opacity: 1; }
+        100% { opacity: 0.8; }
+      }
+      
+      .glitch {
+        position: relative;
+      }
+      
+      .glitch::before, .glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      
+      .glitch::before {
+        color: var(--neon-secondary);
+        animation: glitch-effect 3s infinite;
+      }
+      
+      .glitch::after {
+        color: var(--neon-accent);
+        animation: glitch-effect 2s infinite reverse;
+      }
+      
+      @keyframes glitch-effect {
+        0% { transform: translate(0); }
+        20% { transform: translate(-3px, 3px); }
+        40% { transform: translate(-3px, -3px); }
+        60% { transform: translate(3px, 3px); }
+        80% { transform: translate(3px, -3px); }
+        100% { transform: translate(0); }
+      }
+      
+      .binary-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 240, 255, 0.03),
+          rgba(0, 240, 255, 0.03) 1px,
+          transparent 1px,
+          transparent 10px
+        );
+        z-index: -1;
+        opacity: 0.5;
+      }
+      
+      .hidden { display: none; }
+      
+      .loader {
+        border: 3px solid transparent;
+        border-top: 3px solid var(--neon-primary);
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        margin-left: 8px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen text-white px-4">
+    <!-- Efeitos de fundo -->
+    <div class="binary-bg"></div>
+    <div class="fixed inset-0 z-0" id="particles-js"></div>
+    
+    <!-- Terminal de login -->
+    <div class="cyber-glass scanline w-full max-w-lg p-8 relative overflow-hidden">
+      <!-- Efeito de borda neon -->
+      <div class="absolute inset-0 border-2 border-transparent" style="box-shadow: 0 0 10px 2px rgba(0, 240, 255, 0.5); pointer-events: none;"></div>
+      
+      <!-- Cabeçalho -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold mb-2 font-orbitron neon-text" data-text="GAME MATCH">GAME MATCH</h1>
+        <p class="text-cyber-accent font-bold tracking-widest">NEXT-GEN GAMING PLATFORM</p>
+        <div class="flex justify-center mt-4">
+          <div class="h-1 w-16 bg-cyber-primary"></div>
+          <div class="h-1 w-16 bg-cyber-secondary mx-2"></div>
+          <div class="h-1 w-16 bg-cyber-accent"></div>
+        </div>
+      </div>
+
+      <!-- Mensagens -->
+      <div id="errorMsg" class="text-red-400 text-sm mb-4 p-3 rounded bg-red-900/30 border border-red-500/50 hidden"></div>
+      <div id="successMsg" class="text-green-400 text-sm mb-4 p-3 rounded bg-green-900/30 border border-green-500/50 hidden"></div>
+
+      <!-- Telas -->
+      <div id="loginView">
+        <form id="loginForm" class="space-y-6">
+          <div>
+            <label class="block text-cyber-primary text-sm font-bold mb-2 font-orbitron">E-MAIL</label>
+            <input id="loginEmail" type="email" placeholder="Coloque seu e-mail" 
+                   class="cyber-input w-full px-4 py-3 rounded font-mono placeholder-cyan-300/50" 
+                   required>
+          </div>
+          
+          <div class="relative">
+            <label class="block text-cyber-primary text-sm font-bold mb-2 font-orbitron">SENHA</label>
+            <input id="loginPassword" type="password" placeholder="••••••••" 
+                   class="cyber-input w-full px-4 py-3 rounded font-mono tracking-widest placeholder-cyan-300/50 pr-10"
+                   required>
+            <button type="button" class="absolute right-3 top-9 text-cyan-300/50 hover:text-cyan-300">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          
+          <button type="submit" id="loginBtn" 
+                  class="cyber-btn cyber-btn-primary w-full py-3 rounded font-orbitron">
+            ENTRAR
+          </button>
+          
+          <div class="flex justify-between text-xs text-cyan-300/80 mt-6">
+            <a href="#" class="hover:text-cyber-accent hover:underline" onclick="showView('resetView')">ESQUECEU SUA SENHA?</a>
+            <a href="#" class="hover:text-cyber-secondary hover:underline" onclick="showView('registerView')">CRIAR UMA NOVA CONTA</a>
+          </div>
+        </form>
+      </div>
+
+      <div id="registerView" class="hidden">
+        <form id="registerForm" class="space-y-6">
+          <div>
+            <label class="block text-cyber-primary text-sm font-bold mb-2 font-orbitron">NOVO USUÁRIO</label>
+            <input id="registerEmail" type="email" placeholder="INSIRA SEU MELHOR E-MAIL" 
+                   class="cyber-input w-full px-4 py-3 rounded font-mono placeholder-cyan-300/50" 
+                   required>
+          </div>
+          
+          <div class="relative">
+            <label class="block text-cyber-primary text-sm font-bold mb-2 font-orbitron">SENHA</label>
+            <input id="registerPassword" type="password" placeholder="••••••••" 
+                   class="cyber-input w-full px-4 py-3 rounded font-mono tracking-widest placeholder-cyan-300/50 pr-10"
+                   minlength="6"
+                   required>
+          </div>
+          
+          <div class="relative">
+            <label class="block text-cyber-primary text-sm font-bold mb-2 font-orbitron">CONFIRME SUA SENHA</label>
+            <input id="registerConfirmPassword" type="password" placeholder="••••••••" 
+                   class="cyber-input w-full px-4 py-3 rounded font-mono tracking-widest placeholder-cyan-300/50 pr-10"
+                   minlength="6"
+                   required>
+          </div>
+          
+          <button type="submit" id="registerBtn" 
+                  class="cyber-btn cyber-btn-primary w-full py-3 rounded font-orbitron">
+            CRIAR CONTA
+          </button>
+          
+          <div class="text-center text-xs text-cyan-300/80 mt-6">
+            <a href="#" class="hover:text-cyber-primary hover:underline" onclick="showView('loginView')">VOLTE PARA O LOGIN</a>
+          </div>
+        </form>
+      </div>
+
+      <div id="resetView" class="hidden">
+        <form id="resetForm" class="space-y-6">
+          <p class="text-sm text-cyan-300 mb-4">COLOQUE SEU E-MAIL PARA REDEFINIR SUA SENHA</p>
+          
+          <div>
+            <label class="block text-cyber-primary text-sm font-bold mb-2 font-orbitron">E-MAIL</label>
+            <input id="resetEmail" type="email" placeholder="COLOQUE SEU E-MAIL" 
+                   class="cyber-input w-full px-4 py-3 rounded font-mono placeholder-cyan-300/50" 
+                   required>
+          </div>
+          
+          <button type="submit" id="resetBtn" 
+                  class="cyber-btn cyber-btn-primary w-full py-3 rounded font-orbitron">
+            ENVIE O CÓDIGO DE RECUPERAÇÃO
+          </button>
+          
+          <div class="text-center text-xs text-cyan-300/80 mt-6">
+            <a href="#" class="hover:text-cyber-primary hover:underline" onclick="showView('loginView')">VOLTAR</a>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Rodapé futurista -->
+      <div class="mt-8 pt-4 border-t border-cyan-900/50 text-center">
+        <p class="text-xs text-cyan-300/50 font-mono pulse">STATUS DO SISTEMA: <span class="text-cyber-accent">ATIVO</span></p>
+        <p class="text-[0.6rem] text-cyan-900/70 mt-2 font-mono">© 2025 GAME MATCH | TODOS OS DIREITOS RESERVADOS</p>
+      </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { 
+        getAuth, 
+        signInWithEmailAndPassword, 
+        createUserWithEmailAndPassword, 
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBnRYShee7OfbRCEuwrNyGxn7fD0A0WMqI",
+        authDomain: "game-match-eb0b0.firebaseapp.com",
+        projectId: "game-match-eb0b0",
+        storageBucket: "game-match-eb0b0.appspot.com",
+        messagingSenderId: "50007587478",
+        appId: "1:50007587478:web:1531992b520908ffbe60b7",
+        measurementId: "G-E6P8TB49S1"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Função para mostrar/ocultar senha
+      document.querySelectorAll('.fa-eye').forEach(icon => {
+        icon.addEventListener('click', function() {
+          const input = this.parentElement.querySelector('input');
+          if (input.type === "password") {
+            input.type = "text";
+            this.classList.replace("fa-eye", "fa-eye-slash");
+          } else {
+            input.type = "password";
+            this.classList.replace("fa-eye-slash", "fa-eye");
+          }
+        });
+      });
+
+      window.login = async function() {
+        clearMessages();
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        const btn = document.getElementById('loginBtn');
+        
+        btn.disabled = true;
+        btn.innerHTML = 'AUTENTICANDO <span class="loader"></span>';
+        
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          showSuccess('ACESSO GARANTIDO, REDIRECIONANDO...');
+          setTimeout(() => {
+            window.location.href = 'home.html';
+          }, 1500);
+        } catch (error) {
+          showError(mapError(error.code));
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'ENTRAR';
+        }
+      };
+
+      window.register = async function() {
+        clearMessages();
+        const email = document.getElementById('registerEmail').value.trim();
+        const password = document.getElementById('registerPassword').value.trim();
+        const confirmPassword = document.getElementById('registerConfirmPassword').value.trim();
+        const btn = document.getElementById('registerBtn');
+        
+        if (password !== confirmPassword) {
+          showError("SENHAS NÃO COINCIDEM");
+          return;
+        }
+        
+        btn.disabled = true;
+        btn.innerHTML = 'VALIDANDO <span class="loader"></span>';
+        
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          showSuccess('REGISTRO CONCLUÍDO, REDIRECIONANDO...');
+          setTimeout(() => {
+            showView('loginView');
+          }, 1500);
+        } catch (error) {
+          showError(mapError(error.code));
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'REGISTRAR';
+        }
+      };
+
+      window.resetPassword = async function() {
+        clearMessages();
+        const email = document.getElementById('resetEmail').value.trim();
+        const btn = document.getElementById('resetBtn');
+        
+        btn.disabled = true;
+        btn.innerHTML = 'ENVIANDO <span class="loader"></span>';
+        
+        try {
+          await sendPasswordResetEmail(auth, email);
+          showSuccess('CÓDIGO ENVIADO PARA O E-MAIL CADASTRADO');
+          document.getElementById('resetEmail').value = '';
+        } catch (error) {
+          showError(mapError(error.code));
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'ENVIE O CÓDIGO DE RECUPERAÇÃO';
+        }
+      };
+
+      window.showView = function(viewId) {
+        ['loginView', 'registerView', 'resetView'].forEach(id => {
+          document.getElementById(id).classList.add('hidden');
+        });
+        document.getElementById(viewId).classList.remove('hidden');
+        clearMessages();
+      };
+
+      window.showError = function(msg) {
+        const el = document.getElementById('errorMsg');
+        el.textContent = msg;
+        el.classList.remove('hidden');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+
+      window.showSuccess = function(msg) {
+        const el = document.getElementById('successMsg');
+        el.textContent = msg;
+        el.classList.remove('hidden');
+      };
+
+      window.clearMessages = function() {
+        document.getElementById('errorMsg').classList.add('hidden');
+        document.getElementById('successMsg').classList.add('hidden');
+      };
+
+      window.mapError = function(code) {
+        const errors = {
+          "auth/invalid-email": "E-MAIL INVÁLIDO",
+          "auth/user-not-found": "E-MAIL NÃO CADASTRADO",
+          "auth/wrong-password": "SENHA INCORRETA",
+          "auth/email-already-in-use": "E-MAIL JÁ CADASTRADO",
+          "auth/weak-password": "SENHA FRACA (MÍNIMO DE 6 CARACTÉRES)",
+          "auth/too-many-requests": "MUITAS TENTATIVAS, TENTE NOVAMENTE MAIS TARDE",
+        };
+        return errors[code] || "ERRO DE SISTEMA: TENTE NOVAMENTE";
+      };
+      
+      // Configurar eventos de formulário
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        login();
+      });
+      
+      document.getElementById('registerForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        register();
+      });
+      
+      document.getElementById('resetForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        resetPassword();
+      });
+      
+      // Efeito de digitação no título
+      const title = document.querySelector('.glitch');
+      if (title) {
+        const originalText = title.textContent;
+        title.textContent = '';
+        let i = 0;
+        const typingEffect = setInterval(() => {
+          if (i < originalText.length) {
+            title.textContent += originalText.charAt(i);
+            i++;
+          } else {
+            clearInterval(typingEffect);
+          }
+        }, 100);
+      }
+    </script>
+    
+    <!-- Script para partículas -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#00f0ff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5, random: true },
+            size: { value: 3, random: true },
+            line_linked: { enable: true, distance: 150, color: "#00f0ff", opacity: 0.3, width: 1 },
+            move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+          },
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onhover: { enable: true, mode: "repulse" },
+              onclick: { enable: true, mode: "push" }
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

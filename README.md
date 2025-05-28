@@ -6,7 +6,7 @@ Bem-vindo à **Game Match**! A plataforma definitiva para gamers que buscam uma 
 
 ## Nossa Missão 🎯
 
-A Game Match nasceu da visão de **Andrey Campos** e **Nathan Salles** com um objetivo claro: conectar gamers de todas as tribos. 🫂 Acreditamos que encontrar companheiros de jogo e fazer novas amizades deve ser fácil e divertido. Por isso, desenvolvemos uma plataforma intuitiva que facilita a jogatina e a busca por pessoas que compartilham da sua paixão. ❤️
+A Game Match nasceu da visão de **Andrey Campos** e **Nathan Salles** com um objetivo claro: conectar gamers de todas as tribos. Acreditamos que encontrar companheiros de jogo e fazer novas amizades deve ser fácil e divertido. Por isso, desenvolvemos uma plataforma intuitiva que facilita a jogatina e a busca por pessoas que compartilham da sua paixão. ❤️
 
 ## O Que Oferecemos 🎮🎲🕹️
 

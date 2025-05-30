@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Match - Feed e Conexões</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-black: #0A0A0A;
+            --secondary-black: #101010;
+            --accent-dark: #1A1A1A;
+            --border-color-dark: #282828;
+            --neon-blue: #00BFFF;
+            --neon-purple: #9400D3;
+            --neon-green: #39FF14;
+            --neon-pink: #FF1493;
+            --neon-yellow: #FFFF00;
+            --neon-red: #FF0000;
+            --text-primary-light: #EAEAEA;
+            --text-secondary-light: #B0B0B0;
+            --text-placeholder: #666666;
+            --font-primary: 'Inter', sans-serif;
+            --font-secondary: 'Montserrat', sans-serif;
+            --neon-blue-rgb: 0, 191, 255;
+            --neon-purple-rgb: 148, 0, 211;
+        }
+
+        body {
+            background-color: var(--primary-black);
+            color: var(--text-primary-light);
+            font-family: var(--font-primary);
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--accent-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 4px;
+            border: 2px solid var(--accent-dark);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-purple);
+        }
+
+        .glass-header {
+            background-color: rgba(16, 16, 16, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color-dark);
+        }
+
+        .card-bg {
+            background-color: var(--secondary-black);
+            border: 1px solid var(--border-color-dark);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-bg:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(var(--neon-blue-rgb), 0.2);
+        }
+
+        .neon-text {
+            font-family: var(--font-secondary);
+            font-weight: 600;
+        }
+
+        .neon-text-blue {
+            color: var(--neon-blue);
+            text-shadow: 0 0 4px var(--neon-blue);
+        }
+
+        .neon-text-purple {
+            color: var(--neon-purple);
+            text-shadow: 0 0 4px var(--neon-purple);
+        }
+
+        .neon-text-green {
+            color: var(--neon-green);
+            text-shadow: 0 0 4px var(--neon-green);
+        }
+
+        .neon-text-pink {
+            color: var(--neon-pink);
+            text-shadow: 0 0 4px var(--neon-pink);
+        }
+
+        .btn-neon {
+            font-family: var(--font-secondary);
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-neon-fill {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: var(--primary-black);
+            box-shadow: 0 0 8px var(--neon-blue), 0 0 12px var(--neon-purple);
+        }
+
+        .btn-neon-fill:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 12px var(--neon-blue), 0 0 18px var(--neon-purple), 0 0 25px var(--neon-blue);
+            transform: translateY(-1px);
+        }
+
+        .btn-neon-outline {
+            background-color: transparent;
+            border-image: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)) 1;
+            color: var(--neon-blue);
+        }
+
+        .btn-neon-outline:hover {
+            background: linear-gradient(45deg, rgba(var(--neon-blue-rgb), 0.1), rgba(var(--neon-purple-rgb), 0.1));
+            color: var(--text-primary-light);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .btn-subtle-neon {
+            background-color: var(--accent-dark);
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 5px rgba(var(--neon-blue-rgb), 0.3);
+        }
+
+        .btn-subtle-neon:hover {
+            background-color: rgba(var(--neon-blue-rgb), 0.15);
+            box-shadow: 0 0 10px rgba(var(--neon-blue-rgb), 0.5);
+        }
+
+
+        .input-modern {
+            background-color: var(--accent-dark);
+            border: 1px solid var(--border-color-dark);
+            color: var(--text-primary-light);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-modern:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 2px rgba(var(--neon-blue-rgb), 0.3);
+        }
+
+        .input-modern::placeholder {
+            color: var(--text-placeholder);
+        }
+
+        .tab-button-modern {
+            padding: 0.5rem 1rem;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: var(--text-secondary-light);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button-modern.active,
+        .tab-button-modern:hover {
+            color: var(--neon-blue);
+            border-bottom-color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .avatar-glow {
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 8px var(--neon-purple);
+        }
+
+        .post-action-button {
+            color: var(--text-secondary-light);
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .post-action-button:hover {
+            transform: scale(1.1);
+        }
+
+        .post-action-button.liked {
+            color: var(--neon-pink);
+        }
+
+        .post-action-button:hover.like {
+            color: var(--neon-pink);
+        }
+
+        .post-action-button:hover.comment {
+            color: var(--neon-green);
+        }
+
+        .post-action-button:hover.share {
+            color: var(--neon-blue);
+        }
+
+        .comment-section {
+            border-top: 1px solid var(--border-color-dark);
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .comment {
+            background-color: var(--accent-dark);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal Styles */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s 0.3s linear;
+        }
+
+        .modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content-box {
+            background-color: var(--secondary-black);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 25px rgba(var(--neon-blue-rgb), 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-backdrop.active .modal-content-box {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--neon-red);
+            color: var(--primary-black);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid var(--primary-black);
+            box-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .temp-chat-message {
+            padding: 0.5rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .temp-chat-message.user {
+            background-color: var(--accent-dark);
+            text-align: right;
+        }
+
+        .temp-chat-message.opponent {
+            background-color: rgba(var(--neon-blue-rgb), 0.1);
+            border: 1px solid rgba(var(--neon-blue-rgb), 0.3);
+        }
+
+        /* Image Preview for Post Creation */
+        #create-post-image-preview-container {
+            margin-top: 0.75rem;
+            /* 12px */
+            position: relative;
+            max-width: 150px;
+            /* Example max width */
+        }
+
+        #create-post-image-preview {
+            max-width: 100%;
+            max-height: 150px;
+            /* Example max height */
+            border-radius: 8px;
+            border: 1px solid var(--border-color-dark);
+            object-fit: cover;
+        }
+
+        #remove-post-image-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--neon-red);
+            color: var(--primary-black);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.9rem;
+            border: 1.5px solid var(--primary-black);
+        }
+
+        .community-card {
+            background-color: var(--accent-dark);
+            padding: 1rem;
+            /* 16px */
+            border-radius: 8px;
+            /* 0.5rem */
+            border: 1px solid var(--border-color-dark);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .community-card:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(var(--neon-purple-rgb), 0.3);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+
+    <header class="glass-header sticky top-0 z-50 px-4 lg:px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center">
+            <a href="#" id="home-logo-link"
+                class="flex items-center text-2xl lg:text-3xl mr-6 lg:mr-10 neon-text neon-text-blue">
+                <i class="fas fa-gamepad mr-2 animate-pulse"></i> GameMatch
+            </a>
+            <nav class="hidden md:flex space-x-5">
+                <a href="#"
+                    class="navbar-item active hover:text-neon-purple transition-colors text-sm uppercase font-medium"
+                    data-nav="inicio">Início</a>
+                <a href="#game-catalog-sidebar-section"
+                    class="navbar-item hover:text-neon-purple transition-colors text-sm uppercase font-medium"
+                    data-nav="explorar-jogos-sidebar">Jogos</a>
+                <a href="#" class="navbar-item hover:text-neon-purple transition-colors text-sm uppercase font-medium"
+                    data-nav="comunidades">Comunidades</a>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-3 lg:space-x-4">
+            <div class="relative w-48 lg:w-64">
+                <input type="text" id="search-input-main" placeholder="Buscar..."
+                    class="input-modern w-full py-2 pl-10 pr-4 text-sm">
+                <button id="search-button-main"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 text-text-placeholder hover:text-neon-blue transition-colors">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <button
+                class="text-text-secondary-light hover:text-neon-blue transition-colors duration-200 focus:outline-none text-xl">
+                <i class="fas fa-bell"></i>
+            </button>
+            <div class="profile-dropdown relative">
+                <button id="profile-menu-button"
+                    class="profile-button-wrapper flex items-center p-1 rounded-full hover:bg-accent-dark transition-colors">
+                    <img id="navbar-avatar"
+                        src="https://ui-avatars.com/api/?name=?&background=9400D3&color=0A0A0A&bold=true"
+                        alt="User Avatar" class="profile-avatar w-8 h-8 lg:w-9 lg:h-9 rounded-full">
+                    <i class="fas fa-chevron-down text-xs ml-1 text-text-secondary-light hidden md:inline"></i>
+                </button>
+                <div id="profile-menu-content"
+                    class="profile-dropdown-content hidden absolute right-0 mt-2 w-52 card-bg py-1 z-[100]">
+                    <div class="px-4 py-2 border-b border-border-color-dark">
+                        <p class="text-sm font-semibold text-text-primary-light" id="dropdown-username-display">Usuário
+                        </p>
+                        <p class="text-xs text-text-secondary-light" id="dropdown-email-display">email@example.com</p>
+                    </div>
+                    <a href="#" id="open-profile-modal-link"
+                        class="profile-dropdown-item block px-4 py-2 text-sm text-text-primary-light hover:bg-accent-dark hover:text-neon-blue transition-colors">
+                        <i class="fas fa-user-circle mr-2 w-4 text-center"></i>Meu Perfil
+                    </a>
+                    <a href="#" id="open-settings-modal-link"
+                        class="profile-dropdown-item block px-4 py-2 text-sm text-text-primary-light hover:bg-accent-dark hover:text-neon-blue transition-colors">
+                        <i class="fas fa-cog mr-2 w-4 text-center"></i>Configurações
+                    </a>
+                    <hr class="border-t border-border-color-dark my-1">
+                    <a href="#" id="logout-button"
+                        class="profile-dropdown-item block px-4 py-2 text-sm text-text-primary-light hover:bg-accent-dark hover:text-neon-pink transition-colors">
+                        <i class="fas fa-sign-out-alt mr-2 w-4 text-center"></i>Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content-area"
+        class="flex-1 container mx-auto px-4 py-6 lg:py-8 grid grid-cols-1 lg:grid-cols-4 gap-5 lg:gap-6">
+        <aside
+            class="lg:col-span-1 space-y-5 lg:space-y-6 sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto pb-10 pr-1 main-sidebar left-sidebar">
+            <section id="player-profile-section-sidebar" class="card-bg p-4">
+                <div class="flex items-center space-x-3 mb-3">
+                    <img id="profile-sidebar-avatar"
+                        src="https://ui-avatars.com/api/?name=J&background=9400D3&color=0A0A0A&bold=true"
+                        alt="Avatar do Jogador" class="w-12 h-12 rounded-full avatar-glow">
+                    <div>
+                        <h3 id="profile-sidebar-username" class="text-lg font-semibold neon-text neon-text-purple">
+                            Jogador</h3>
+                        <p class="text-xs text-neon-green">Online</p>
+                    </div>
+                </div>
+                <p id="profile-sidebar-bio-short" class="text-xs text-text-secondary-light mb-3">Buscando players para
+                    zerar a noite!</p>
+                <button id="view-full-profile-btn" class="w-full btn-neon btn-neon-outline text-xs py-1.5">Ver
+                    Perfil</button>
+            </section>
+
+            <section id="match-area-section-sidebar" class="card-bg p-4">
+                <h2 class="text-xl font-semibold mb-3 neon-text neon-text-green">Matches</h2>
+                <div class="border-b border-border-color-dark mb-3">
+                    <nav class="-mb-px flex space-x-1" aria-label="Tabs">
+                        <button data-tab="received"
+                            class="match-tab-button-sidebar tab-button-modern active">Recebidos</button>
+                        <button data-tab="sent" class="match-tab-button-sidebar tab-button-modern">Enviados</button>
+                    </nav>
+                </div>
+                <div id="match-tab-content-sidebar" class="text-xs space-y-2 min-h-[50px]">
+                </div>
+            </section>
+        </aside>
+
+        <div id="feed-content-area" class="lg:col-span-2 space-y-5 lg:space-y-6 main-feed-area">
+            <section id="create-post-section" class="card-bg p-4 lg:p-5">
+                <div class="flex items-start space-x-3">
+                    <img id="create-post-avatar"
+                        src="https://ui-avatars.com/api/?name=U&background=9400D3&color=0A0A0A&bold=true"
+                        alt="Seu avatar" class="w-10 h-10 rounded-full">
+                    <textarea id="create-post-textarea" class="input-modern flex-grow" rows="3"
+                        placeholder="No que você está pensando, Jogador?"></textarea>
+                </div>
+                <div id="create-post-image-preview-container" class="hidden">
+                    <img id="create-post-image-preview" src="#" alt="Pré-visualização da imagem">
+                    <button id="remove-post-image-btn" class="btn-neon p-1 text-xs">&times;</button>
+                </div>
+                <div class="flex justify-between items-center mt-3">
+                    <div class="flex space-x-2">
+                        <input type="file" id="create-post-image-input" class="hidden" accept="image/*">
+                        <button id="add-image-button" title="Adicionar Imagem"
+                            class="text-text-secondary-light hover:text-neon-blue p-2 rounded-full text-lg"><i
+                                class="fas fa-image"></i></button>
+                        <button title="Marcar Jogo"
+                            class="text-text-secondary-light hover:text-neon-blue p-2 rounded-full text-lg"><i
+                                class="fas fa-gamepad"></i></button>
+                    </div>
+                    <button id="publish-post-button" class="btn-neon btn-neon-fill text-sm">Publicar</button>
+                </div>
+                <div id="post-error-message" class="text-neon-red text-sm mt-2 hidden"></div>
+                <div id="post-upload-progress" class="text-neon-blue text-sm mt-2 hidden"></div>
+            </section>
+
+            <section id="feed-posts-container" class="space-y-5 lg:space-y-6">
+                <div class="text-center p-10 text-text-secondary-light" id="feed-loading-placeholder">
+                    <i class="fas fa-spinner fa-spin text-3xl text-neon-blue"></i>
+                    <p class="mt-3 text-sm">Carregando publicações...</p>
+                </div>
+            </section>
+        </div>
+
+        <aside
+            class="lg:col-span-1 space-y-5 lg:space-y-6 sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto pb-10 pl-1 main-sidebar right-sidebar">
+            <section id="player-suggestions-section" class="card-bg p-4">
+                <h2 class="text-xl font-semibold mb-3 neon-text neon-text-blue">Sugestões para Você</h2>
+                <button id="find-suggested-players-btn" class="w-full btn-neon btn-neon-outline text-sm mb-3">
+                    <i class="fas fa-users mr-2"></i>Encontrar Jogadores
+                </button>
+                <div id="suggested-players-list" class="space-y-3 min-h-[70px]">
+                    <p class="text-xs text-text-secondary-light text-center">Clique para ver sugestões.</p>
+                </div>
+                <div id="suggestions-loading" class="text-center p-4 hidden"> <i
+                        class="fas fa-spinner fa-spin text-xl text-neon-blue"></i> </div>
+                <div id="suggestions-error-message" class="text-neon-red text-sm mt-2 hidden"></div>
+            </section>
+
+            <section id="game-catalog-sidebar-section" class="card-bg p-4">
+                <h3 class="text-xl font-semibold mb-3 neon-text neon-text-purple">Explorar Jogos</h3>
+                <input type="text" id="search-games-sidebar" placeholder="Buscar jogo..."
+                    class="input-modern w-full mb-3 text-sm">
+                <div id="category-filter-buttons-sidebar" class="flex flex-wrap gap-1 mb-3">
+                    <button class="filter-button-sidebar-modern tab-button-modern text-xs active"
+                        data-category="all">Todos</button>
+                </div>
+                <div id="game-catalog-grid-sidebar" class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                </div>
+            </section>
+        </aside>
+
+        <section id="communities-section" class="hidden lg:col-span-4 space-y-5 lg:space-y-6 w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold neon-text neon-text-purple">Comunidades</h2>
+                <button id="create-community-btn" class="btn-neon btn-neon-fill">
+                    <i class="fas fa-plus mr-2"></i>Criar Comunidade
+                </button>
+            </div>
+            <div id="communities-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <p id="communities-loading-placeholder"
+                    class="text-text-secondary-light col-span-full text-center py-8">
+                    <i class="fas fa-spinner fa-spin text-2xl text-neon-purple"></i> Carregando comunidades...
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="edit-profile-modal" class="modal-backdrop">
+        <div class="modal-content-box">
+            <button id="close-edit-profile-modal" class="modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold neon-text neon-text-blue mb-4">Editar Perfil</h3>
+            <form id="edit-profile-form">
+                <div class="mb-4">
+                    <label for="edit-nickname-input"
+                        class="block text-sm font-medium text-text-secondary-light mb-1">Apelido (Nickname)</label>
+                    <input type="text" id="edit-nickname-input" class="input-modern" placeholder="Seu apelido" required>
+                </div>
+                <div class="mb-6">
+                    <label for="edit-bio-textarea" class="block text-sm font-medium text-text-secondary-light mb-1">Bio
+                        (Descrição)</label>
+                    <textarea id="edit-bio-textarea" class="input-modern" rows="4"
+                        placeholder="Conte um pouco sobre você..."></textarea>
+                </div>
+                <p id="edit-profile-error-message" class="text-neon-red text-sm mb-3 hidden"></p>
+                <p id="edit-profile-success-message" class="text-neon-green text-sm mb-3 hidden"></p>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-edit-profile-button"
+                        class="btn-neon btn-neon-outline">Cancelar</button>
+                    <button type="submit" id="save-profile-button" class="btn-neon btn-neon-fill">Salvar
+                        Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal-backdrop">
+        <div class="modal-content-box">
+            <button id="close-settings-modal" class="modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold neon-text neon-text-blue mb-4">Configurações</h3>
+            <p class="text-text-primary-light">Em breve, mais opções de personalização.</p>
+        </div>
+    </div>
+
+    <div id="create-community-modal" class="modal-backdrop">
+        <div class="modal-content-box">
+            <button id="close-create-community-modal" class="modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold neon-text neon-text-purple mb-4">Criar Nova Comunidade</h3>
+            <form id="create-community-form">
+                <div class="mb-4">
+                    <label for="community-name-input"
+                        class="block text-sm font-medium text-text-secondary-light mb-1">Nome da Comunidade</label>
+                    <input type="text" id="community-name-input" class="input-modern" placeholder="Ex: Amantes de RPG"
+                        required>
+                </div>
+                <div class="mb-6">
+                    <label for="community-description-textarea"
+                        class="block text-sm font-medium text-text-secondary-light mb-1">Descrição</label>
+                    <textarea id="community-description-textarea" class="input-modern" rows="4"
+                        placeholder="Sobre o que é esta comunidade?" required></textarea>
+                </div>
+                <p id="create-community-error-message" class="text-neon-red text-sm mb-3 hidden"></p>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-create-community-button"
+                        class="btn-neon btn-neon-outline">Cancelar</button>
+                    <button type="submit" id="save-community-button" class="btn-neon btn-neon-fill">Criar
+                        Comunidade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="community-details-modal" class="modal-backdrop">
+        <div class="modal-content-box">
+            <button id="close-community-details-modal" class="modal-close-btn">&times;</button>
+            <h3 id="modal-community-name" class="text-2xl font-bold neon-text neon-text-purple mb-2">Nome da Comunidade
+            </h3>
+            <p id="modal-community-description" class="text-sm text-text-secondary-light mb-4"></p>
+            <hr class="border-border-color-dark my-3">
+            <p class="text-text-primary-light text-center">Área interna da comunidade (posts e chat) será implementada
+                em breve.</p>
+        </div>
+    </div>
+
+
+    <div id="image-preview-modal" class="modal-backdrop">
+        <div class="modal-content-box max-w-3xl max-h-[90vh]">
+            <button id="close-image-preview-modal-outer" class="modal-close-btn">&times;</button>
+            <img id="modal-image-content" src="" alt="Pré-visualização da Imagem"
+                class="max-w-full max-h-[80vh] object-contain rounded">
+        </div>
+    </div>
+
+    <div id="game-details-modal" class="modal-backdrop">
+        <div class="modal-content-box">
+            <button id="close-game-details-modal" class="modal-close-btn">&times;</button>
+            <img id="modal-game-image" src="" alt="Capa do Jogo"
+                class="w-full h-48 object-cover rounded-lg mb-4 border border-neon-purple">
+            <h3 id="modal-game-name" class="text-2xl font-bold neon-text neon-text-purple mb-1">Nome do Jogo</h3>
+            <p class="text-sm text-text-secondary-light mb-1">Categoria: <span id="modal-game-category"
+                    class="font-semibold"></span></p>
+            <p id="modal-game-description" class="text-sm text-text-primary-light mb-4 max-h-28 overflow-y-auto">
+                Descrição do jogo...</p>
+
+            <button id="modal-find-player-button" class="w-full btn-neon btn-neon-fill text-sm mb-3">
+                <i class="fas fa-user-friends mr-2"></i>Buscar Player Aleatório
+            </button>
+
+            <div id="temp-chat-simulation-area" class="mt-3 border-t border-border-color-dark pt-3 hidden">
+                <h4 class="text-sm font-semibold neon-text neon-text-green mb-2">Chat Temporário</h4>
+                <div id="temp-chat-status" class="text-xs text-text-secondary-light mb-2"></div>
+                <div id="temp-chat-messages"
+                    class="space-y-1.5 max-h-32 overflow-y-auto bg-accent-dark p-2 rounded-md border border-border-color-dark mb-2">
+                </div>
+                <div class="flex space-x-2">
+                    <input type="text" id="temp-chat-input" class="input-modern flex-grow text-xs py-1.5"
+                        placeholder="Digite sua mensagem...">
+                    <button id="temp-chat-send-btn" class="btn-neon btn-subtle-neon text-xs py-1 px-2">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        // --- Firebase SDK Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, updateDoc, arrayUnion, arrayRemove, where, Timestamp, writeBatch, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+        // --- Firebase Configuration and Initialization ---
+        const firebaseConfigFromHost = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appIdFromHost = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthTokenFromHost = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app;
+        let auth;
+        let db;
+        let storage; // Firebase Storage instance
+        let currentUser = null;
+        let currentUserProfile = null;
+        let selectedPostImageFile = null; // For create post image
+
+        const defaultConfig = {
+            apiKey: "YOUR_API_KEY", authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID", storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID", appId: "YOUR_APP_ID"
+        };
+        const firebaseConfig = firebaseConfigFromHost ? JSON.parse(firebaseConfigFromHost) : defaultConfig;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            storage = getStorage(app); // Initialize Firebase Storage
+            setLogLevel('debug');
+        } catch (error) {
+            console.error("Erro ao inicializar Firebase: ", error);
+            document.body.innerHTML = `<div class="text-center p-10 text-neon-red">Falha crítica ao conectar. Tente recarregar.</div>`;
+        }
+
+        // --- DOM Elements ---
+        const mainContentArea = document.getElementById('main-content-area');
+        const feedContentArea = document.getElementById('feed-content-area');
+        const communitiesSection = document.getElementById('communities-section');
+        const leftSidebar = document.querySelector('.main-sidebar.left-sidebar');
+        const rightSidebar = document.querySelector('.main-sidebar.right-sidebar');
+
+        const navInicioLink = document.querySelector('a[data-nav="inicio"]');
+        const navComunidadesLink = document.querySelector('a[data-nav="comunidades"]');
+        const navJogosLink = document.querySelector('a[data-nav="explorar-jogos-sidebar"]');
+
+
+        // --- User Authentication ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                // Use the global loadUserProfile from script.js if available
+                if (typeof window.loadUserProfile === 'function') {
+                    await window.loadUserProfile(user.uid);
+                    currentUserProfile = window.currentUserProfile; // Ensure it's synced
+                } else { // Fallback if script.js loadUserProfile isn't available/loaded yet
+                    await loadUserProfileInternal(user.uid);
+                }
+                updateUIAfterLogin();
+                loadPosts();
+                loadMatchRequests('received');
+                loadCommunities(); // Load communities on auth change
+            } else {
+                currentUser = null; currentUserProfile = null;
+                console.log("Nenhum usuário autenticado.");
+                const feedLoadingPlaceholder = document.getElementById('feed-loading-placeholder');
+                if (feedLoadingPlaceholder) feedLoadingPlaceholder.innerHTML = `<p class="text-text-secondary-light">Faça login para ver o feed.</p>`;
+                const createPostSection = document.getElementById('create-post-section');
+                if (createPostSection) createPostSection.classList.add('hidden');
+                if (communitiesSection) communitiesSection.classList.add('hidden'); // Hide communities if not logged in
+                if (feedContentArea) feedContentArea.classList.remove('hidden'); // Show feed area by default
+                if (leftSidebar) leftSidebar.classList.remove('hidden');
+                if (rightSidebar) rightSidebar.classList.remove('hidden');
+                if (mainContentArea) mainContentArea.classList.remove('lg:grid-cols-1');
+                if (mainContentArea) mainContentArea.classList.add('lg:grid-cols-4');
+            }
+        });
+
+        // Internal fallback for user profile loading if script.js one isn't ready
+        async function loadUserProfileInternal(userId) {
+            if (!db || !userId) return Promise.resolve();
+            // Path consistency with script.js: users/{userId}
+            const userProfilePath = `users/${userId}`;
+            const userDocRef = doc(db, userProfilePath);
+            try {
+                const docSnap = await getDoc(userDocRef);
+                if (docSnap.exists()) {
+                    currentUserProfile = { id: docSnap.id, ...docSnap.data() };
+                } else {
+                    const nickname = currentUser.displayName || currentUser.email?.split('@')[0] || `Jogador_${userId.substring(0, 5)}`;
+                    currentUserProfile = {
+                        uid: userId, nickname: nickname,
+                        avatarUrl: currentUser.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(nickname)}&background=random&color=fff&font-size=0.5&bold=true`,
+                        bio: "Novo por aqui!", favoriteGames: [], platform: "PC", playStyle: "Casual", objectives: "Diversão",
+                        email: currentUser.email, createdAt: serverTimestamp(),
+                        usernameGameMatch: `@${nickname.replace(/\s+/g, '_').toLowerCase()}`
+                    };
+                    await setDoc(userDocRef, currentUserProfile);
+                }
+                console.log("Perfil do usuário carregado (interno):", currentUserProfile);
+            } catch (error) {
+                console.error("Erro ao carregar/criar perfil (interno):", error);
+                const nickname = currentUser?.displayName || currentUser?.email?.split('@')[0] || `Jogador_${userId.substring(0, 5)}`;
+                currentUserProfile = { // Provide a default structure on error
+                    uid: userId, nickname: nickname, bio: "Erro ao carregar perfil.", email: currentUser?.email,
+                    avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(nickname[0])}&background=9400D3&color=0A0A0A&bold=true`,
+                };
+            }
+        }
+
+
+        async function attemptSignIn() {
+            if (!auth) return;
+            try {
+                if (initialAuthTokenFromHost) {
+                    await signInWithCustomToken(auth, initialAuthTokenFromHost);
+                } else if (!auth.currentUser) {
+                    // await signInAnonymously(auth); // Anonymous sign-in might not be desired for full features
+                    console.log("No user signed in and no custom token. User needs to login via index.html");
+                }
+            } catch (error) { console.error("Error during initial sign-in:", error); }
+        }
+        attemptSignIn();
+
+        function updateUIAfterLogin() {
+            if (!currentUserProfile) {
+                console.warn("updateUIAfterLogin called but currentUserProfile is null or incomplete.");
+                // Simplified fallback if profile is not fully loaded but user exists
+                const defaultNickname = currentUser?.email?.split('@')[0] || "Usuário";
+                const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(defaultNickname?.[0] || 'U')}&background=9400D3&color=0A0A0A&bold=true`;
+
+                document.getElementById('navbar-avatar').src = defaultAvatar;
+                document.getElementById('dropdown-username-display').textContent = defaultNickname;
+                document.getElementById('dropdown-email-display').textContent = currentUser?.email || "E-mail não disponível";
+                document.getElementById('create-post-avatar').src = defaultAvatar;
+                document.getElementById('profile-sidebar-avatar').src = defaultAvatar;
+                document.getElementById('profile-sidebar-username').textContent = defaultNickname;
+                document.getElementById('profile-sidebar-bio-short').textContent = "Carregando perfil...";
+                return;
+            }
+
+            const { avatarUrl, nickname, email, bio } = currentUserProfile;
+            const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(nickname?.[0] || 'U')}&background=9400D3&color=0A0A0A&bold=true`;
+
+            document.getElementById('navbar-avatar').src = avatarUrl || defaultAvatar;
+            document.getElementById('dropdown-username-display').textContent = nickname || "Usuário";
+            document.getElementById('dropdown-email-display').textContent = email || "E-mail não disponível";
+
+            document.getElementById('create-post-avatar').src = avatarUrl || defaultAvatar;
+            document.getElementById('profile-sidebar-avatar').src = avatarUrl || defaultAvatar;
+            document.getElementById('profile-sidebar-username').textContent = nickname || "Usuário";
+            const shortBio = bio || "Bem-vindo!";
+            document.getElementById('profile-sidebar-bio-short').textContent = shortBio.substring(0, 70) + (shortBio.length > 70 ? "..." : "");
+
+            const createPostSection = document.getElementById('create-post-section');
+            if (createPostSection) createPostSection.classList.remove('hidden');
+        }
+
+        // --- Profile Dropdown Modals Logic ---
+        const openProfileModalLink = document.getElementById('open-profile-modal-link');
+        const editProfileModal = document.getElementById('edit-profile-modal');
+        const closeEditProfileModalBtn = document.getElementById('close-edit-profile-modal');
+        const cancelEditProfileBtn = document.getElementById('cancel-edit-profile-button');
+        const editProfileForm = document.getElementById('edit-profile-form');
+        const editNicknameInput = document.getElementById('edit-nickname-input');
+        const editBioTextarea = document.getElementById('edit-bio-textarea');
+        const saveProfileButton = document.getElementById('save-profile-button');
+        const editProfileErrorMessage = document.getElementById('edit-profile-error-message');
+        const editProfileSuccessMessage = document.getElementById('edit-profile-success-message');
+
+        const openSettingsModalLink = document.getElementById('open-settings-modal-link');
+        const settingsModal = document.getElementById('settings-modal');
+        const closeSettingsModalBtn = document.getElementById('close-settings-modal');
+
+        if (openProfileModalLink) {
+            openProfileModalLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!currentUserProfile) {
+                    alert("Perfil não carregado. Tente novamente.");
+                    return;
+                }
+                editNicknameInput.value = currentUserProfile.nickname || '';
+                editBioTextarea.value = currentUserProfile.bio || '';
+                editProfileErrorMessage.classList.add('hidden');
+                editProfileSuccessMessage.classList.add('hidden');
+                editProfileModal.classList.add('active');
+            });
+        }
+
+        function closeEditProfileModal() {
+            editProfileModal.classList.remove('active');
+        }
+        if (closeEditProfileModalBtn) closeEditProfileModalBtn.addEventListener('click', closeEditProfileModal);
+        if (cancelEditProfileBtn) cancelEditProfileBtn.addEventListener('click', closeEditProfileModal);
+        if (editProfileModal) editProfileModal.addEventListener('click', (e) => {
+            if (e.target === editProfileModal) closeEditProfileModal();
+        });
+
+        if (editProfileForm) {
+            editProfileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser || !currentUserProfile) {
+                    editProfileErrorMessage.textContent = "Usuário não autenticado.";
+                    editProfileErrorMessage.classList.remove('hidden');
+                    return;
+                }
+                const newNickname = editNicknameInput.value.trim();
+                const newBio = editBioTextarea.value.trim();
+
+                if (!newNickname) {
+                    editProfileErrorMessage.textContent = "O apelido não pode ficar em branco.";
+                    editProfileErrorMessage.classList.remove('hidden');
+                    return;
+                }
+                editProfileErrorMessage.classList.add('hidden');
+                editProfileSuccessMessage.classList.add('hidden');
+                saveProfileButton.disabled = true;
+                saveProfileButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Salvando...`;
+
+                try {
+                    const userProfileRef = doc(db, `users/${currentUser.uid}`); // Path consistency
+                    await updateDoc(userProfileRef, {
+                        nickname: newNickname,
+                        bio: newBio
+                    });
+                    currentUserProfile.nickname = newNickname;
+                    currentUserProfile.bio = newBio;
+                    updateUIAfterLogin(); // Refresh UI with new details
+
+                    editProfileSuccessMessage.textContent = "Perfil atualizado com sucesso!";
+                    editProfileSuccessMessage.classList.remove('hidden');
+                    setTimeout(() => {
+                        closeEditProfileModal();
+                        editProfileSuccessMessage.classList.add('hidden');
+                    }, 2000);
+
+                } catch (error) {
+                    console.error("Erro ao atualizar perfil:", error);
+                    editProfileErrorMessage.textContent = "Erro ao salvar. Tente novamente.";
+                    editProfileErrorMessage.classList.remove('hidden');
+                } finally {
+                    saveProfileButton.disabled = false;
+                    saveProfileButton.textContent = "Salvar Alterações";
+                }
+            });
+        }
+
+        if (openSettingsModalLink) {
+            openSettingsModalLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                settingsModal.classList.add('active');
+            });
+        }
+        if (closeSettingsModalBtn) closeSettingsModalBtn.addEventListener('click', () => settingsModal.classList.remove('active'));
+        if (settingsModal) settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) settingsModal.classList.remove('active');
+        });
+
+
+        // --- Game Data & Catalog Logic (Sidebar) ---
+        const gamesDataFull = [
+            { id: 'apex-legends', name: 'Apex Legends', image: 'https://logowik.com/content/uploads/images/apex-legends-logo.jpg', category: 'FPS', description: 'Battle Royale em ritmo acelerado com personagens lendários e habilidades táticas.' },
+            { id: 'fortnite', name: 'Fortnite', image: 'https://storage.googleapis.com/replit/images/1687982293016_bbb34e31d8106b0094b017e29599693e.webp', category: 'Battle Royale', description: 'Construa, lute e sobreviva neste popular Battle Royale com eventos constantes.' },
+            { id: 'cod-warzone', name: 'COD Warzone', image: 'https://wallpapers.com/images/hd/call-of-duty-background-00uaq46uwmvr3jwt.jpg', category: 'Battle Royale', description: 'Ação intensa de Call of Duty em um massivo mapa Battle Royale.' },
+            { id: 'valorant', name: 'Valorant', image: 'https://cdn.textstudio.com/output/graphic/preview/large/4/2/0/0/10024_385be5c4.webp', category: 'FPS', description: 'FPS tático 5v5 com agentes únicos e habilidades explosivas.' },
+            { id: 'cs2', name: 'Counter-Strike 2', image: 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/730/capsule_616x353.jpg?t=1745368595', category: 'FPS', description: 'A evolução do lendário FPS competitivo, agora com gráficos e mecânicas aprimoradas.' },
+            { id: 'overwatch2', name: 'Overwatch 2', image: 'https://static.wikia.nocookie.net/overwatch/images/b/b7/OW2_Logo_Dark.webp', category: 'FPS', description: 'Hero shooter em equipe com novos heróis, mapas e modos de jogo.' },
+            { id: 'rainbow-six-siege', name: 'Rainbow Six Siege', image: 'https://logowik.com/content/uploads/images/rainbow-six-siege1279.jpg', category: 'FPS', description: 'Combate tático e destrutivo onde estratégia e precisão são cruciais.' },
+            { id: 'genshin-impact', name: 'Genshin Impact', image: 'https://www.showmetech.com.br/wp-content/uploads//2022/11/gameblast.jpg', category: 'Action RPG', description: 'Explore o vasto mundo de Teyvat neste RPG de ação de mundo aberto com visuais deslumbrantes.' },
+            { id: 'ffxiv', name: 'Final Fantasy XIV', image: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/39210/header.jpg?t=1738089746', category: 'MMORPG', description: 'Mergulhe em Eorzea, um MMORPG aclamado com uma história rica e conteúdo vasto.' },
+            { id: 'diablo-iv', name: 'Diablo IV', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_8obdZwLyUCK2co3ps2hx0lBMHvA_N7cSyA&s', category: 'Action RPG', description: 'Retorne ao Santuário e enfrente Lilith neste sombrio Action RPG.' },
+            { id: 'elden-ring', name: 'Elden Ring', image: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/capsule_616x353.jpg?t=1744748041', category: 'Action RPG', description: 'Desafie semideuses e explore as Terras Intermédias neste épico RPG de ação.' },
+            { id: 'monster-hunter-wilds', name: 'Monster Hunter Wilds', image: 'https://pbs.twimg.com/media/GB4L0HtbgAAB0bb.jpg:large', category: 'Action RPG', description: 'Prepare-se para a próxima evolução da caça a monstros em um ecossistema vibrante.' },
+            { id: 'zenless-zone-zero', name: 'Zenless Zone Zero', image: 'https://www.overclockers.co.uk/blog/wp-content/uploads/2024/06/Zenless-Zone-Zero-1024x1024.png', category: 'Action RPG', description: 'RPG de ação urbana e estilosa dos criadores de Genshin Impact.' },
+            { id: 'lol', name: 'League of Legends', image: 'https://pop.proddigital.com.br/wp-content/uploads/sites/8/2022/11/analise-league-of-legends-divulgacao.jpg', category: 'MOBA', description: 'O MOBA mais popular do mundo, com um elenco diverso de campeões e batalhas estratégicas.' },
+            { id: 'dota2', name: 'Dota 2', image: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/570/capsule_616x353.jpg?t=1748018387', category: 'MOBA', description: 'MOBA complexo e recompensador com uma curva de aprendizado profunda e jogabilidade estratégica.' },
+            { id: 'marvel-rivals', name: 'Marvel Rivals', image: 'https://preview.redd.it/please-add-marvel-rivals-v0-m7bk94xuel4e1.jpeg', category: 'Hero Shooter', description: 'Lute como seus heróis e vilões favoritos da Marvel neste novo hero shooter 6v6.' },
+            { id: 'rocket-league', name: 'Rocket League', image: 'https://www.rocketleague.com/images/keyart/rl_evergreen.jpg', category: 'Sports', description: 'Futebol encontra carros movidos a foguete em uma competição arcade de alta octanagem.' },
+            { id: 'fc25', name: 'EA Sports FC 25', image: 'https://cdn1.epicgames.com/offer/b61e8ddd14e94619b7a74cf9d73f86b5/EGS_EASPORTSFC25StandardEdition_EACanada_S1_2560x1440-f650d1a50a08e78279071d931145822a', category: 'Sports', description: 'A nova era do futebol virtual, com realismo e autenticidade aprimorados.' },
+            { id: 'nba2k25', name: 'NBA 2K25', image: 'https://cdn.awsli.com.br/800x800/1041/1041512/produto/289088396/nba-2k25-1-drzzd149zl.jpg', category: 'Sports', description: 'Viva a cultura do basquete com o simulador mais autêntico da NBA.' },
+            { id: 'forza-horizon-5', name: 'Forza Horizon 5', image: 'https://www.overclockers.co.uk/blog/wp-content/uploads/2021/07/Forza-Horizon-5.jpg', category: 'Racing', description: 'Explore as paisagens vibrantes do México neste festival de corrida de mundo aberto.' },
+            { id: 'minecraft', name: 'Minecraft', image: 'https://cienciahoje.org.br/wp-content/uploads/2020/11/C_C-POP_0fe20042_0bb8_4781_82f4_7130f928b021.jpg', category: 'Sandbox', description: 'Construa, explore e sobreviva em um mundo de blocos com infinitas possibilidades.' },
+            { id: 'roblox', name: 'Roblox', image: 'https://dyfo9ra69zibm.cloudfront.net/wp-content/uploads/2023/07/11082714/o-que-e-xd-no-roblox.jpg', category: 'Sandbox', description: 'Uma plataforma global que permite criar, compartilhar e jogar milhões de experiências 3D.' },
+            { id: 'terraria', name: 'Terraria', image: 'https://upload.wikimedia.org/wikipedia/pt/e/ee/Terraria_capa.png', category: 'Sandbox', description: 'Cave, lute, explore e construa neste jogo de aventura 2D cheio de ação.' },
+            { id: 'dead-by-daylight', name: 'Dead by Daylight', image: 'https://cdn1.epicgames.com/offer/611482b8586142cda48a0786eb8a127c/EGS_DeadbyDaylight_BehaviourInteractive_S1_2560x1440-a32581cf9948a9a2e24b2ff15c1577c7', category: 'Horror', description: 'Jogo de terror multiplayer assimétrico onde um jogador assume o papel de um assassino brutal.' },
+            { id: 'phasmophobia', name: 'Phasmophobia', image: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/739630/capsule_616x353.jpg?t=1747947938', category: 'Horror', description: 'Terror psicológico cooperativo onde você e sua equipe caçam fantasmas em locais assombrados.' },
+            { id: 'resident-evil-village', name: 'Resident Evil Village', image: 'https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2021/05/26/c5eb3d50-8718-4ed9-9300-43e2266765a2.jpg', category: 'Horror', description: 'Survival horror com ação intensa e uma narrativa arrepiante na pele de Ethan Winters.' },
+            { id: 'mecha-break', name: 'Mecha Break', image: 'https://i0.wp.com/dropsdejogos.uai.com.br/wp-content/uploads/sites/10/2025/03/screenshot-20250313-021733-gmail-scaled.jpg', category: 'Action', description: 'Pilote mechas personalizáveis em combates multiplayer de alta velocidade.' },
+            { id: 'warframe', name: 'Warframe', image: 'https://www-static.warframe.com/images/landing/warframe-metacard.png', category: 'Action RPG', description: 'Loote-shooter de ficção científica com ninjas espaciais, parkour e personalização profunda.' },
+            { id: 'helldivers-2', name: 'Helldivers 2', image: 'https://flowgames.gg/wp-content/uploads/2024/01/helldivers-2-ps5.jpg', category: 'Shooter Co-op', description: 'Lute pela liberdade em uma galáxia hostil neste intenso shooter cooperativo em terceira pessoa.' },
+            { id: 'wow-shadowlands', name: 'WoW: Shadowlands', image: 'https://salaodejogos.net/wp-content/uploads/2020/11/world-of-warcraft-shadowlands.jpeg', category: 'MMORPG', description: 'Aventure-se pelas Terras Sombrias, o reino dos mortos no universo de World of Warcraft.' },
+            { id: 'baldurs-gate-3', name: "Baldur's Gate 3", image: 'https://image.api.playstation.com/vulcan/ap/rnd/202302/2321/3098481c9164bb5f33069b37e49fba1a572ea3b89971ee7b.jpg', category: 'RPG', description: 'Um RPG de nova geração ambientado no mundo de Dungeons & Dragons, com escolhas impactantes.' },
+            { id: 'new-world', name: 'New World', image: 'https://images.ctfassets.net/j95d1p8hsuun/5HfZgnMPvfkymGz9RVs9OY/026f1af05b0da8a63e8345ae13b6edfc/NWA_1200x630.jpg', category: 'MMORPG', description: 'Explore a ilha sobrenatural de Aeternum neste MMORPG da Amazon Games.' },
+            { id: 'the-witcher-3', name: 'The Witcher 3: Wild Hunt', image: 'https://upload.wikimedia.org/wikipedia/pt/0/06/TW3_Wild_Hunt.png', category: 'Action RPG', description: 'Cace monstros como Geralt de Rivia neste RPG de mundo aberto aclamado pela crítica.' },
+            { id: 'starcraft-2', name: 'StarCraft 2', image: 'https://store-images.s-microsoft.com/image/apps.11562.14124222480596136.ed20a9aa-83ad-4957-99bb-a6b44ee47223.966f09b0-5e8c-47d6-ada0-7714b0cb26e8', category: 'Strategy (RTS)', description: 'Comande exércitos futuristas neste icônico jogo de estratégia em tempo real.' },
+        ];
+
+        const uniqueGameCategoriesSidebar = ["all", ...new Set(gamesDataFull.map(g => g.category))];
+        const gameCatalogGridSidebar = document.getElementById('game-catalog-grid-sidebar');
+        const categoryFilterButtonsSidebarContainer = document.getElementById('category-filter-buttons-sidebar');
+        const searchGamesSidebarInput = document.getElementById('search-games-sidebar');
+
+        const gameDetailsModal = document.getElementById('game-details-modal');
+        const closeGameDetailsModalBtn = document.getElementById('close-game-details-modal');
+        const modalGameImage = document.getElementById('modal-game-image');
+        const modalGameName = document.getElementById('modal-game-name');
+        const modalGameCategory = document.getElementById('modal-game-category');
+        const modalGameDescription = document.getElementById('modal-game-description');
+        const modalFindPlayerButton = document.getElementById('modal-find-player-button');
+        const tempChatSimulationArea = document.getElementById('temp-chat-simulation-area');
+        const tempChatStatus = document.getElementById('temp-chat-status');
+        const tempChatMessages = document.getElementById('temp-chat-messages');
+        const tempChatInput = document.getElementById('temp-chat-input');
+        const tempChatSendBtn = document.getElementById('temp-chat-send-btn');
+        let currentModalGameId = null;
+
+
+        function createGameCardSidebar(game) {
+            const isFavorited = currentUserProfile?.favoriteGames?.includes(game.id);
+            const card = document.createElement('div');
+            card.className = 'bg-accent-dark p-2.5 rounded-md flex items-center space-x-3 hover:border hover:border-neon-purple transition-all duration-200 cursor-pointer game-card-sidebar-item';
+            card.dataset.gameId = game.id;
+            card.innerHTML = `
+                <img src="${game.image}" alt="${game.name}" class="w-10 h-10 object-cover rounded" onerror="this.onerror=null;this.src='https://placehold.co/40x40/1A1A1A/9400D3?text=${game.name.charAt(0)}';">
+                <div class="flex-grow pointer-events-none"> <h4 class="text-sm font-semibold text-text-primary-light">${game.name}</h4>
+                    <p class="text-xs text-text-secondary-light">${game.category}</p>
+                </div>
+                <button class="favorite-btn-sidebar text-xl ${isFavorited ? 'text-neon-yellow' : 'text-text-secondary-light'} hover:text-neon-yellow z-10" data-game-id="${game.id}">
+                    <i class="${isFavorited ? 'fas' : 'far'} fa-star"></i>
+                </button>
+            `;
+            card.querySelector('.favorite-btn-sidebar').addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleFavoriteGame(game.id, e.currentTarget);
+            });
+            card.addEventListener('click', () => {
+                openGameDetailsModal(game.id);
+            });
+            return card;
+        }
+
+        async function toggleFavoriteGame(gameId, buttonElement) {
+            if (!currentUser || !currentUserProfile || !db) {
+                alert("Você precisa estar logado para favoritar jogos.");
+                return;
+            }
+            // Path consistency: users/{userId}
+            const userProfileRef = doc(db, `users/${currentUser.uid}`);
+            const iconElement = buttonElement.querySelector('i');
+            try {
+                await runTransaction(db, async (transaction) => {
+                    const userDoc = await transaction.get(userProfileRef);
+                    if (!userDoc.exists()) throw "Documento do perfil não existe!";
+
+                    const currentFavorites = userDoc.data().favoriteGames || [];
+                    let newFavoritesArray;
+                    if (currentFavorites.includes(gameId)) {
+                        newFavoritesArray = currentFavorites.filter(id => id !== gameId);
+                        iconElement.classList.remove('fas', 'text-neon-yellow');
+                        iconElement.classList.add('far', 'text-text-secondary-light');
+                    } else {
+                        newFavoritesArray = [...currentFavorites, gameId];
+                        iconElement.classList.remove('far', 'text-text-secondary-light');
+                        iconElement.classList.add('fas', 'text-neon-yellow');
+                    }
+                    transaction.update(userProfileRef, { favoriteGames: newFavoritesArray });
+                    currentUserProfile.favoriteGames = newFavoritesArray;
+                });
+                console.log(`Jogo ${gameId} favorito atualizado.`);
+            } catch (error) {
+                console.error("Erro ao atualizar jogo favorito:", error);
+                alert("Erro ao atualizar favorito. Tente novamente.");
+                const isCurrentlyFavoritedInProfile = currentUserProfile.favoriteGames.includes(gameId);
+                if (isCurrentlyFavoritedInProfile) {
+                    iconElement.classList.remove('far', 'text-text-secondary-light');
+                    iconElement.classList.add('fas', 'text-neon-yellow');
+                } else {
+                    iconElement.classList.remove('fas', 'text-neon-yellow');
+                    iconElement.classList.add('far', 'text-text-secondary-light');
+                }
+            }
+        }
+
+        function populateGameCatalogSidebar(filter = 'all', searchTerm = '') {
+            if (!gameCatalogGridSidebar) return;
+            gameCatalogGridSidebar.innerHTML = '';
+            let localGamesData = [...gamesDataFull];
+            if (filter !== 'all') {
+                localGamesData = localGamesData.filter(game => game.category === filter);
+            }
+            if (searchTerm) {
+                const lowerSearchTerm = searchTerm.toLowerCase();
+                localGamesData = localGamesData.filter(game => game.name.toLowerCase().includes(lowerSearchTerm) || game.category.toLowerCase().includes(lowerSearchTerm));
+            }
+            if (localGamesData.length === 0) {
+                gameCatalogGridSidebar.innerHTML = `<p class="text-xs text-text-secondary-light text-center col-span-full">Nenhum jogo encontrado.</p>`;
+                return;
+            }
+            localGamesData.forEach(game => gameCatalogGridSidebar.appendChild(createGameCardSidebar(game)));
+        }
+        function populateCategoryFiltersSidebar() {
+            if (!categoryFilterButtonsSidebarContainer) return;
+            const existingButtons = categoryFilterButtonsSidebarContainer.querySelectorAll('button:not([data-category="all"])');
+            existingButtons.forEach(btn => btn.remove());
+
+            uniqueGameCategoriesSidebar.forEach(category => {
+                if (category === 'all') return;
+                const button = document.createElement('button');
+                button.className = 'filter-button-sidebar-modern tab-button-modern text-xs';
+                button.textContent = category;
+                button.dataset.category = category;
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('#category-filter-buttons-sidebar .tab-button-modern').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    populateGameCatalogSidebar(category, searchGamesSidebarInput.value.trim());
+                });
+                categoryFilterButtonsSidebarContainer.appendChild(button);
+            });
+            const allButton = categoryFilterButtonsSidebarContainer.querySelector('button[data-category="all"]');
+            if (allButton) {
+                allButton.addEventListener('click', () => {
+                    document.querySelectorAll('#category-filter-buttons-sidebar .tab-button-modern').forEach(btn => btn.classList.remove('active'));
+                    allButton.classList.add('active');
+                    populateGameCatalogSidebar('all', searchGamesSidebarInput.value.trim());
+                });
+            }
+        }
+        if (searchGamesSidebarInput) {
+            searchGamesSidebarInput.addEventListener('input', () => {
+                const activeCategoryButton = document.querySelector('#category-filter-buttons-sidebar .tab-button-modern.active');
+                populateGameCatalogSidebar(activeCategoryButton ? activeCategoryButton.dataset.category : 'all', searchGamesSidebarInput.value.trim());
+            });
+        }
+
+        function openGameDetailsModal(gameId) {
+            const game = gamesDataFull.find(g => g.id === gameId);
+            if (!game || !gameDetailsModal) return;
+
+            currentModalGameId = gameId;
+
+            modalGameImage.src = game.image;
+            modalGameImage.alt = game.name;
+            modalGameName.textContent = game.name;
+            modalGameCategory.textContent = game.category;
+            modalGameDescription.textContent = game.description || "Descrição não disponível.";
+
+            tempChatSimulationArea.classList.add('hidden');
+            tempChatMessages.innerHTML = '';
+            tempChatStatus.textContent = '';
+            modalFindPlayerButton.disabled = false;
+            modalFindPlayerButton.innerHTML = '<i class="fas fa-user-friends mr-2"></i>Buscar Player Aleatório';
+
+
+            gameDetailsModal.classList.add('active');
+        }
+
+        if (closeGameDetailsModalBtn) {
+            closeGameDetailsModalBtn.addEventListener('click', () => {
+                if (gameDetailsModal) gameDetailsModal.classList.remove('active');
+            });
+        }
+        if (gameDetailsModal) {
+            gameDetailsModal.addEventListener('click', (e) => {
+                if (e.target === gameDetailsModal) {
+                    gameDetailsModal.classList.remove('active');
+                }
+            });
+        }
+
+
+        if (modalFindPlayerButton) {
+            modalFindPlayerButton.addEventListener('click', async () => {
+                if (!currentModalGameId) return;
+                const game = gamesDataFull.find(g => g.id === currentModalGameId);
+                if (!game) return;
+
+                modalFindPlayerButton.disabled = true;
+                modalFindPlayerButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Buscando...`;
+                tempChatSimulationArea.classList.remove('hidden');
+                tempChatStatus.textContent = `Buscando jogador para ${game.name}...`;
+                tempChatMessages.innerHTML = '';
+
+                const prompt = `Gere um nome de usuário fictício para um jogador (username) e uma primeira mensagem de chat (firstMessage) que este jogador enviaria ao ser conectado com alguém para jogar "${game.name}". A mensagem deve ser curta, amigável e relacionada ao jogo. Retorne em formato JSON.`;
+
+                try {
+                    // This API key needs to be correctly set up for Gemini for this to work.
+                    // For now, I'll use the placeholder from the original file.
+                    // The user has provided a separate API Key in script.js for Gemini: AIzaSyDi14I-ukTk-iEO43KxnBHVVu8w1yGS1Cg
+                    const GEMINI_API_KEY = "AIzaSyDi14I-ukTk-iEO43KxnBHVVu8w1yGS1Cg"; // From script.js
+                    if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || GEMINI_API_KEY === "") { // Check if it's a placeholder
+                        throw new Error("Chave da API Gemini não configurada ou é um placeholder. A simulação de chat não funcionará.");
+                    }
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+
+                    const payload = {
+                        contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "OBJECT",
+                                properties: {
+                                    "opponentUsername": { "type": "STRING" },
+                                    "firstMessage": { "type": "STRING" }
+                                },
+                                required: ["opponentUsername", "firstMessage"]
+                            }
+                        }
+                    };
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                        const jsonResponseText = result.candidates[0].content.parts[0].text;
+                        const simulatedPlayerData = JSON.parse(jsonResponseText);
+
+                        tempChatStatus.textContent = `Conectado com ${simulatedPlayerData.opponentUsername}!`;
+                        const opponentMessageDiv = document.createElement('div');
+                        opponentMessageDiv.className = 'temp-chat-message opponent';
+                        opponentMessageDiv.innerHTML = `<strong>${simulatedPlayerData.opponentUsername}:</strong> ${simulatedPlayerData.firstMessage}`;
+                        tempChatMessages.appendChild(opponentMessageDiv);
+
+                    } else {
+                        throw new Error("Resposta inesperada da API Gemini para simulação de chat.");
+                    }
+                } catch (error) {
+                    console.error("Erro na simulação de chat:", error);
+                    tempChatStatus.textContent = `Erro ao buscar jogador. Verifique a chave da API.`;
+                    tempChatMessages.innerHTML = `<p class="text-xs text-neon-red">${error.message}</p>`;
+                } finally {
+                    // Keep button disabled for this demo or allow retry
+                    // modalFindPlayerButton.disabled = false; 
+                    // modalFindPlayerButton.innerHTML = '<i class="fas fa-user-friends mr-2"></i>Buscar Outro Player';
+                }
+            });
+        }
+
+        if (tempChatSendBtn) {
+            tempChatSendBtn.addEventListener('click', () => {
+                const messageText = tempChatInput.value.trim();
+                if (!messageText) return;
+
+                const userMessageDiv = document.createElement('div');
+                userMessageDiv.className = 'temp-chat-message user';
+                userMessageDiv.innerHTML = `<strong>Você:</strong> ${messageText}`;
+                tempChatMessages.appendChild(userMessageDiv);
+                tempChatInput.value = '';
+                tempChatMessages.scrollTop = tempChatMessages.scrollHeight;
+            });
+            tempChatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    tempChatSendBtn.click();
+                }
+            });
+        }
+
+
+        // --- Feed Logic ---
+        const feedPostsContainer = document.getElementById('feed-posts-container');
+        const createPostTextarea = document.getElementById('create-post-textarea');
+        const publishPostButton = document.getElementById('publish-post-button');
+        const postErrorMessage = document.getElementById('post-error-message');
+        const feedLoadingPlaceholder = document.getElementById('feed-loading-placeholder');
+        const imagePreviewModal = document.getElementById('image-preview-modal');
+        const modalImageContent = document.getElementById('modal-image-content');
+        const closeImagePreviewModalBtn = document.getElementById('close-image-preview-modal-outer');
+        const postUploadProgress = document.getElementById('post-upload-progress');
+
+
+        // Create Post Image Handling
+        const addImageButton = document.getElementById('add-image-button');
+        const createImageInput = document.getElementById('create-post-image-input');
+        const imagePreviewContainer = document.getElementById('create-post-image-preview-container');
+        const imagePreview = document.getElementById('create-post-image-preview');
+        const removeImageButton = document.getElementById('remove-post-image-btn');
+
+        if (addImageButton) {
+            addImageButton.addEventListener('click', () => createImageInput.click());
+        }
+
+        if (createImageInput) {
+            createImageInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    selectedPostImageFile = file;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreviewContainer.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    selectedPostImageFile = null;
+                    imagePreviewContainer.classList.add('hidden');
+                    imagePreview.src = '#';
+                }
+            });
+        }
+        if (removeImageButton) {
+            removeImageButton.addEventListener('click', () => {
+                selectedPostImageFile = null;
+                createImageInput.value = ''; // Reset file input
+                imagePreviewContainer.classList.add('hidden');
+                imagePreview.src = '#';
+            });
+        }
+
+
+        if (closeImagePreviewModalBtn) {
+            closeImagePreviewModalBtn.addEventListener('click', () => imagePreviewModal.classList.remove('active'));
+        }
+        if (imagePreviewModal) {
+            imagePreviewModal.addEventListener('click', (e) => {
+                if (e.target === imagePreviewModal) {
+                    imagePreviewModal.classList.remove('active');
+                }
+            });
+        }
+
+        async function loadPosts() {
+            if (!db || !feedPostsContainer) return;
+            if (feedLoadingPlaceholder) feedLoadingPlaceholder.classList.remove('hidden');
+
+            try {
+                const postsCollectionPath = `artifacts/${appIdFromHost}/public/data/posts`;
+                const q = query(collection(db, postsCollectionPath), orderBy("timestamp", "desc"), limit(20));
+                const querySnapshot = await getDocs(q);
+
+                if (feedLoadingPlaceholder) feedLoadingPlaceholder.classList.add('hidden');
+                feedPostsContainer.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    feedPostsContainer.innerHTML = '<p class="text-center text-text-secondary-light py-8">Nenhuma publicação ainda. Seja o primeiro!</p>';
+                    return;
+                }
+                querySnapshot.forEach((doc) => {
+                    const post = { id: doc.id, ...doc.data() };
+                    feedPostsContainer.appendChild(createPostElement(post));
+                });
+            } catch (error) {
+                console.error("Erro ao carregar posts: ", error);
+                if (feedLoadingPlaceholder) feedLoadingPlaceholder.classList.add('hidden');
+                feedPostsContainer.innerHTML = '<p class="text-center text-neon-red py-8">Erro ao carregar publicações.</p>';
+            }
+        }
+        function formatFirestoreTimestamp(firestoreTimestamp) {
+            if (!firestoreTimestamp) return 'agora';
+            if (firestoreTimestamp.toDate && typeof firestoreTimestamp.toDate === 'function') {
+                const date = firestoreTimestamp.toDate();
+                const now = new Date();
+                const diffSeconds = Math.round((now - date) / 1000);
+                const diffMinutes = Math.round(diffSeconds / 60);
+                const diffHours = Math.round(diffMinutes / 60);
+                const diffDays = Math.round(diffHours / 24);
+
+                if (diffSeconds < 60) return `${diffSeconds}s`;
+                if (diffMinutes < 60) return `${diffMinutes}m`;
+                if (diffHours < 24) return `${diffHours}h`;
+                if (diffDays < 7) return `${diffDays}d`;
+                return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+            }
+            return new Date(firestoreTimestamp).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+        }
+
+        function createPostElement(post) {
+            const article = document.createElement('article');
+            article.className = 'card-bg p-4 lg:p-5';
+            article.dataset.postId = post.id;
+
+            const userLiked = post.likes && currentUser && post.likes[currentUser.uid];
+            const likesCount = post.likes ? Object.keys(post.likes).length : 0;
+            const commentsCount = post.comments ? post.comments.length : 0;
+
+            article.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <img src="${post.userAvatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(post.userNickname?.[0] || 'P')}&background=random&color=fff&bold=true`}" alt="Avatar de ${post.userNickname}" class="w-10 h-10 rounded-full">
+                    <div class="flex-grow">
+                        <div class="flex items-center space-x-1.5">
+                            <h4 class="font-semibold text-text-primary-light">${post.userNickname || 'Usuário Anônimo'}</h4>
+                            <span class="text-xs text-text-secondary-light">· ${formatFirestoreTimestamp(post.timestamp)}</span>
+                        </div>
+                        <p class="mt-1 text-text-primary-light whitespace-pre-wrap">${post.content ? post.content.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''}</p>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Imagem do post" class="mt-3 rounded-lg max-h-[400px] w-auto object-contain cursor-pointer post-image bg-accent-dark p-1 border border-border-color-dark">` : ''}
+                        <div class="mt-4 flex items-center space-x-5 text-sm">
+                            <button class="post-action-button like ${userLiked ? 'liked' : ''}" data-action="like">
+                                <i class="${userLiked ? 'fas' : 'far'} fa-heart mr-1.5"></i> <span class="like-count">${likesCount}</span>
+                            </button>
+                            <button class="post-action-button comment" data-action="comment-toggle">
+                                <i class="far fa-comment mr-1.5"></i> <span class="comment-count">${commentsCount}</span>
+                            </button>
+                            <button class="post-action-button share" data-action="share">
+                                <i class="fas fa-share mr-1.5"></i> Compartilhar
+                            </button>
+                        </div>
+                        <div class="comment-section mt-3 hidden">
+                            <div class="comments-list mb-2 max-h-40 overflow-y-auto pr-1 space-y-1.5">
+                                </div>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" class="input-modern comment-input-field flex-grow text-xs" placeholder="Adicionar um comentário...">
+                                <button class="btn-neon btn-subtle-neon text-xs py-1 px-2 comment-submit-btn">Enviar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const postImage = article.querySelector('.post-image');
+            if (postImage) {
+                postImage.addEventListener('click', () => {
+                    if (modalImageContent && imagePreviewModal) {
+                        modalImageContent.src = post.imageUrl;
+                        imagePreviewModal.classList.add('active');
+                    }
+                });
+            }
+            article.querySelector('[data-action="like"]').addEventListener('click', async (e) => {
+                if (!currentUser) { alert("Faça login para curtir."); return; }
+                const postRef = doc(db, `artifacts/${appIdFromHost}/public/data/posts/${post.id}`);
+                const likeButton = e.currentTarget;
+                const likeIcon = likeButton.querySelector('i');
+                const likeCountSpan = likeButton.querySelector('.like-count');
+
+                try {
+                    await runTransaction(db, async (transaction) => {
+                        const postDoc = await transaction.get(postRef);
+                        if (!postDoc.exists()) throw "Post não encontrado.";
+
+                        const currentLikes = postDoc.data().likes || {};
+                        let newLikesCount;
+                        if (currentLikes[currentUser.uid]) {
+                            delete currentLikes[currentUser.uid];
+                            likeIcon.classList.remove('fas', 'liked');
+                            likeIcon.classList.add('far');
+                            likeButton.classList.remove('liked');
+                        } else {
+                            currentLikes[currentUser.uid] = true;
+                            likeIcon.classList.remove('far');
+                            likeIcon.classList.add('fas', 'liked');
+                            likeButton.classList.add('liked');
+                        }
+                        newLikesCount = Object.keys(currentLikes).length;
+                        transaction.update(postRef, { likes: currentLikes });
+                        likeCountSpan.textContent = newLikesCount;
+                    });
+                } catch (error) {
+                    console.error("Erro ao curtir/descurtir:", error);
+                }
+            });
+            const commentToggleButton = article.querySelector('[data-action="comment-toggle"]');
+            const commentSectionDiv = article.querySelector('.comment-section');
+            const commentsListDiv = article.querySelector('.comments-list');
+
+            commentToggleButton.addEventListener('click', () => {
+                commentSectionDiv.classList.toggle('hidden');
+                if (!commentSectionDiv.classList.contains('hidden') && commentsListDiv.innerHTML === '') {
+                    loadCommentsForPost(post, commentsListDiv);
+                } else if (commentSectionDiv.classList.contains('hidden')) {
+                }
+            });
+            article.querySelector('.comment-submit-btn').addEventListener('click', async (e) => {
+                if (!currentUser || !currentUserProfile) { alert("Faça login para comentar."); return; }
+                const inputField = article.querySelector('.comment-input-field');
+                const commentText = inputField.value.trim();
+                if (!commentText) return;
+
+                const commentData = {
+                    userId: currentUser.uid,
+                    userNickname: currentUserProfile.nickname,
+                    userAvatarUrl: currentUserProfile.avatarUrl,
+                    text: commentText,
+                    timestamp: serverTimestamp()
+                };
+
+                try {
+                    const postRef = doc(db, `artifacts/${appIdFromHost}/public/data/posts/${post.id}`);
+                    await updateDoc(postRef, {
+                        comments: arrayUnion(commentData)
+                    });
+                    inputField.value = '';
+                    addCommentToUI(commentData, commentsListDiv, true);
+                    const commentCountSpan = article.querySelector('.comment-count');
+                    commentCountSpan.textContent = parseInt(commentCountSpan.textContent) + 1;
+
+                } catch (error) {
+                    console.error("Erro ao adicionar comentário:", error);
+                    alert("Não foi possível adicionar o comentário.");
+                }
+            });
+            return article;
+        }
+
+        function loadCommentsForPost(post, commentsListDiv) {
+            commentsListDiv.innerHTML = '<p class="text-xs text-text-secondary-light">Carregando comentários...</p>';
+            if (post.comments && post.comments.length > 0) {
+                commentsListDiv.innerHTML = '';
+                const sortedComments = post.comments.sort((a, b) => {
+                    const tsA = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0;
+                    const tsB = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0;
+                    return tsB - tsA;
+                });
+                sortedComments.forEach(comment => addCommentToUI(comment, commentsListDiv));
+            } else {
+                commentsListDiv.innerHTML = '<p class="text-xs text-text-secondary-light">Nenhum comentário ainda.</p>';
+            }
+        }
+
+        function addCommentToUI(comment, commentsListDiv, prepend = false) {
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'comment text-xs flex items-start space-x-2';
+            commentDiv.innerHTML = `
+                <img src="${comment.userAvatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.userNickname?.[0] || 'C')}&background=random&color=fff&bold=true`}" alt="${comment.userNickname}" class="w-6 h-6 rounded-full mt-0.5">
+                <div>
+                    <span class="font-semibold text-text-primary-light">${comment.userNickname}</span>
+                    <span class="text-text-secondary-light ml-1 whitespace-pre-wrap">${comment.text ? comment.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''}</span>
+                    <div class="text-xxs text-text-placeholder mt-0.5">${formatFirestoreTimestamp(comment.timestamp)}</div>
+                </div>
+            `;
+            if (prepend) {
+                const noCommentsP = commentsListDiv.querySelector('p');
+                if (noCommentsP) noCommentsP.remove(); // Remove "Nenhum comentário" or "Carregando"
+                commentsListDiv.insertBefore(commentDiv, commentsListDiv.firstChild);
+            } else {
+                const noCommentsP = commentsListDiv.querySelector('p');
+                if (noCommentsP && (noCommentsP.textContent.includes("Nenhum comentário") || noCommentsP.textContent.includes("Carregando"))) {
+                    noCommentsP.remove();
+                }
+                commentsListDiv.appendChild(commentDiv);
+            }
+        }
+        if (publishPostButton) {
+            publishPostButton.addEventListener('click', async () => {
+                if (!currentUser || !currentUserProfile) {
+                    if (postErrorMessage) {
+                        postErrorMessage.textContent = "Você precisa estar logado para publicar.";
+                        postErrorMessage.classList.remove('hidden');
+                    }
+                    return;
+                }
+                const content = createPostTextarea.value.trim();
+                if (!content && !selectedPostImageFile) { // Check if both text and image are missing
+                    if (postErrorMessage) {
+                        postErrorMessage.textContent = "A publicação não pode estar vazia (texto ou imagem).";
+                        postErrorMessage.classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                if (postErrorMessage) postErrorMessage.classList.add('hidden');
+                if (postUploadProgress) postUploadProgress.classList.add('hidden');
+
+                publishPostButton.disabled = true;
+                publishPostButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Publicando...`;
+                let imageUrl = null;
+
+                try {
+                    // 1. Upload image if selected
+                    if (selectedPostImageFile) {
+                        if (postUploadProgress) {
+                            postUploadProgress.textContent = "Enviando imagem...";
+                            postUploadProgress.classList.remove('hidden');
+                        }
+                        const imageName = `post_${Date.now()}_${selectedPostImageFile.name}`;
+                        // Path includes appIdFromHost for potential multi-tenant scenarios in the future or for organization.
+                        const imageStorageRef = storageRef(storage, `artifacts/${appIdFromHost}/post_images/${currentUser.uid}/${imageName}`);
+                        const uploadTask = uploadBytesResumable(imageStorageRef, selectedPostImageFile);
+
+                        await new Promise((resolve, reject) => {
+                            uploadTask.on('state_changed',
+                                (snapshot) => {
+                                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                    if (postUploadProgress) postUploadProgress.textContent = `Enviando imagem: ${Math.round(progress)}%`;
+                                },
+                                (error) => {
+                                    console.error("Erro no upload da imagem:", error);
+                                    reject(error);
+                                },
+                                async () => {
+                                    imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                                    if (postUploadProgress) postUploadProgress.textContent = "Imagem enviada!";
+                                    resolve();
+                                }
+                            );
+                        });
+                    }
+
+                    // 2. Add post to Firestore
+                    const postsCollectionPath = `artifacts/${appIdFromHost}/public/data/posts`;
+                    await addDoc(collection(db, postsCollectionPath), {
+                        userId: currentUser.uid,
+                        userNickname: currentUserProfile.nickname,
+                        userAvatarUrl: currentUserProfile.avatarUrl,
+                        content: content,
+                        imageUrl: imageUrl, // Save the URL
+                        timestamp: serverTimestamp(),
+                        likes: {},
+                        comments: []
+                    });
+
+                    createPostTextarea.value = '';
+                    selectedPostImageFile = null; // Reset selected file
+                    createImageInput.value = ''; // Reset file input visually
+                    imagePreviewContainer.classList.add('hidden'); // Hide preview
+                    imagePreview.src = '#';
+                    if (postUploadProgress) postUploadProgress.classList.add('hidden');
+                    loadPosts(); // Refresh feed
+
+                } catch (error) {
+                    console.error("Erro ao publicar post:", error);
+                    if (postErrorMessage) {
+                        postErrorMessage.textContent = `Erro ao publicar: ${error.message}. Tente novamente.`;
+                        postErrorMessage.classList.remove('hidden');
+                    }
+                    if (postUploadProgress) postUploadProgress.classList.add('hidden');
+                } finally {
+                    publishPostButton.disabled = false;
+                    publishPostButton.textContent = 'Publicar';
+                }
+            });
+        }
+
+
+        // --- Player Suggestions Logic (Gemini API) ---
+        const findSuggestedPlayersBtn = document.getElementById('find-suggested-players-btn');
+        const suggestedPlayersList = document.getElementById('suggested-players-list');
+        const suggestionsLoading = document.getElementById('suggestions-loading');
+        const suggestionsErrorMessage = document.getElementById('suggestions-error-message');
+
+        if (findSuggestedPlayersBtn) {
+            findSuggestedPlayersBtn.addEventListener('click', async () => {
+                if (!currentUserProfile) {
+                    if (suggestionsErrorMessage) {
+                        suggestionsErrorMessage.textContent = "Perfil do usuário não carregado. Tente novamente.";
+                        suggestionsErrorMessage.classList.remove('hidden');
+                    }
+                    return;
+                }
+                if (suggestionsLoading) suggestionsLoading.classList.remove('hidden');
+                if (suggestedPlayersList) suggestedPlayersList.innerHTML = '';
+                if (suggestionsErrorMessage) suggestionsErrorMessage.classList.add('hidden');
+                findSuggestedPlayersBtn.disabled = true;
+                findSuggestedPlayersBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Buscando...`;
+
+
+                const userPromptProfile = `
+                    Meu perfil:
+                    - Jogos Favoritos: ${currentUserProfile.favoriteGames?.map(gid => gamesDataFull.find(g => g.id === gid)?.name).filter(Boolean).join(', ') || 'Não especificado'}
+                    - Plataforma: ${currentUserProfile.platform || 'Não especificado'}
+                    - Estilo de Jogo: ${currentUserProfile.playStyle || 'Não especificado'}
+                    - Objetivos: ${currentUserProfile.objectives || 'Não especificado'}
+                `;
+
+                const prompt = `Baseado neste perfil de jogador: ${userPromptProfile}. Sugira 3 jogadores fictícios (NÃO use nomes de pessoas reais ou celebridades) que seriam bons parceiros de jogo. Para cada um, forneça: username (curto, estilo gamer, único), seus 2 jogos principais (mainGames), plataforma (platform), e uma breve razão (reason) pela qual seriam uma boa combinação (máximo 20 palavras). Retorne em formato JSON. Certifique-se que os usernames sejam criativos e não nomes comuns.`;
+
+                try {
+                    // const GEMINI_API_KEY = ""; // As per original file, this should be empty or handled by host.
+                    // However, script.js now contains: const GEMINI_API_KEY = "AIzaSyDi14I-ukTk-iEO43KxnBHVVu8w1yGS1Cg";
+                    const GEMINI_API_KEY = "AIzaSyDi14I-ukTk-iEO43KxnBHVVu8w1yGS1Cg"; // Using the one from script.js
+                    if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || GEMINI_API_KEY === "") {
+                        throw new Error("Chave da API Gemini não configurada ou é um placeholder. Sugestões de jogadores não funcionarão.");
+                    }
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+
+                    const payload = {
+                        contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        "username": { "type": "STRING" },
+                                        "mainGames": { "type": "ARRAY", "items": { "type": "STRING" } },
+                                        "platform": { "type": "STRING" },
+                                        "reason": { "type": "STRING" }
+                                    },
+                                    required: ["username", "mainGames", "platform", "reason"]
+                                }
+                            }
+                        }
+                    };
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                        const jsonResponseText = result.candidates[0].content.parts[0].text;
+                        const suggestedPlayers = JSON.parse(jsonResponseText);
+                        displaySuggestedPlayers(suggestedPlayers);
+                    } else {
+                        throw new Error("Resposta inesperada da API Gemini.");
+                    }
+
+                } catch (error) {
+                    console.error("Erro ao buscar sugestões:", error);
+                    if (suggestionsErrorMessage) {
+                        suggestionsErrorMessage.textContent = `Erro nas sugestões: ${error.message}. Verifique a chave da API.`;
+                        suggestionsErrorMessage.classList.remove('hidden');
+                    }
+                    if (suggestedPlayersList) suggestedPlayersList.innerHTML = '<p class="text-xs text-text-secondary-light text-center">Não foi possível carregar sugestões.</p>';
+                } finally {
+                    if (suggestionsLoading) suggestionsLoading.classList.add('hidden');
+                    findSuggestedPlayersBtn.disabled = false;
+                    findSuggestedPlayersBtn.innerHTML = `<i class="fas fa-users mr-2"></i>Encontrar Jogadores`;
+                }
+            });
+        }
+
+        function displaySuggestedPlayers(players) {
+            if (!suggestedPlayersList) return;
+            suggestedPlayersList.innerHTML = '';
+            if (!players || players.length === 0) {
+                suggestedPlayersList.innerHTML = '<p class="text-xs text-text-secondary-light text-center">Nenhuma sugestão no momento.</p>';
+                return;
+            }
+            players.forEach(player => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'bg-accent-dark p-3 rounded-md border border-border-color-dark';
+                playerCard.innerHTML = `
+                    <div class="flex items-center space-x-2 mb-1.5">
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(player.username.charAt(0))}&background=random&color=fff&bold=true&font-size=0.5" alt="${player.username}" class="w-8 h-8 rounded-full">
+                        <h5 class="font-semibold text-sm neon-text neon-text-blue">${player.username}</h5>
+                    </div>
+                    <p class="text-xs text-text-primary-light mb-0.5"><strong>Jogos:</strong> ${player.mainGames.join(', ')}</p>
+                    <p class="text-xs text-text-primary-light mb-1"><strong>Plataforma:</strong> ${player.platform}</p>
+                    <p class="text-xs text-text-secondary-light italic mb-2">"${player.reason}"</p>
+                    <button class="w-full btn-neon btn-neon-fill text-xs connect-suggestion-btn" data-username="${player.username}" data-games="${player.mainGames.join(',')}">Conectar</button>
+                `;
+                playerCard.querySelector('.connect-suggestion-btn').addEventListener('click', handleConnectSuggestion);
+                suggestedPlayersList.appendChild(playerCard);
+            });
+        }
+
+        async function handleConnectSuggestion(event) {
+            if (!currentUser || !currentUserProfile) {
+                alert("Faça login para se conectar com jogadores.");
+                return;
+            }
+            const button = event.currentTarget;
+            const suggestedUsername = button.dataset.username;
+            const suggestedGames = button.dataset.games;
+
+            button.disabled = true;
+            button.innerHTML = `<i class="fas fa-spinner fa-spin text-xs"></i>`;
+
+            try {
+                const matchRequestsPath = `artifacts/${appIdFromHost}/public/data/match_requests`;
+                await addDoc(collection(db, matchRequestsPath), {
+                    senderId: currentUser.uid,
+                    senderNickname: currentUserProfile.nickname,
+                    receiverUsername: suggestedUsername, // This is a fictional username from Gemini
+                    games: suggestedGames.split(','),
+                    status: "pending_suggestion", // Differentiate from direct user-to-user requests if needed
+                    timestamp: serverTimestamp()
+                });
+                button.textContent = 'Pedido Enviado';
+                button.classList.remove('btn-neon-fill');
+                button.classList.add('bg-neon-green', 'text-primary-black');
+                loadMatchRequests('sent'); // Refresh the 'sent' tab in matches
+            } catch (error) {
+                console.error("Erro ao enviar pedido de conexão:", error);
+                alert("Não foi possível enviar o pedido de conexão.");
+                button.disabled = false;
+                button.textContent = 'Conectar';
+            }
+        }
+
+
+        const profileMenuButton = document.getElementById('profile-menu-button');
+        const profileMenuContent = document.getElementById('profile-menu-content');
+        if (profileMenuButton && profileMenuContent) {
+            profileMenuButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                profileMenuContent.classList.toggle('hidden');
+            });
+            document.addEventListener('click', (event) => {
+                if (profileMenuButton && !profileMenuButton.contains(event.target) &&
+                    profileMenuContent && !profileMenuContent.contains(event.target)) {
+                    profileMenuContent.classList.add('hidden');
+                }
+            });
+        }
+        const logoutButton = document.getElementById('logout-button');
+        if (logoutButton && auth) {
+            logoutButton.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    window.location.href = 'index.html';
+                }).catch(error => console.error("Erro ao deslogar:", error));
+            });
+        }
+        const viewFullProfileBtn = document.getElementById('view-full-profile-btn');
+        if (viewFullProfileBtn) {
+            viewFullProfileBtn.addEventListener('click', () => {
+                // The 'open-profile-modal-link' already handles opening the new edit profile modal
+                if (openProfileModalLink) {
+                    openProfileModalLink.click();
+                } else {
+                    alert("Funcionalidade de perfil completo a ser implementada.");
+                }
+            });
+        }
+
+        // --- Match Area Tab Logic (Sidebar) ---
+        const matchTabButtonsSidebar = document.querySelectorAll('#match-area-section-sidebar .match-tab-button-sidebar');
+        const matchTabContentSidebar = document.getElementById('match-tab-content-sidebar');
+
+        async function loadMatchRequests(tabType) {
+            if (!matchTabContentSidebar || !currentUser) {
+                if (matchTabContentSidebar) matchTabContentSidebar.innerHTML = `<p class="text-xs text-text-secondary-light text-center py-2">Faça login para ver seus matches.</p>`;
+                return;
+            }
+            matchTabContentSidebar.innerHTML = `<div class="text-center py-2"><i class="fas fa-spinner fa-spin text-neon-green"></i></div>`;
+
+            let q;
+            const matchRequestsPath = `artifacts/${appIdFromHost}/public/data/match_requests`;
+
+            if (tabType === 'received') {
+                // For received, we'd typically query where receiverId is current user's ID.
+                // This part of the logic needs a clear definition of how "receiverId" is stored for actual users.
+                // For now, assuming it's `receiverId == currentUser.uid` for actual matches.
+                // Gemini suggestions won't appear here unless a real user "receives" one.
+                q = query(collection(db, matchRequestsPath), where("receiverId", "==", currentUser.uid), where("status", "==", "pending"), orderBy("timestamp", "desc"));
+            } else if (tabType === 'sent') {
+                q = query(collection(db, matchRequestsPath), where("senderId", "==", currentUser.uid),
+                    where("status", "in", ["pending", "pending_suggestion", "accepted", "declined"]), // Show various statuses for sent items
+                    orderBy("timestamp", "desc"));
+            } else {
+                matchTabContentSidebar.innerHTML = `<p class="text-xs text-text-secondary-light text-center py-2">Aba inválida.</p>`;
+                return;
+            }
+
+            try {
+                const querySnapshot = await getDocs(q);
+                if (querySnapshot.empty) {
+                    matchTabContentSidebar.innerHTML = `<p class="text-xs text-text-secondary-light text-center py-2">Nenhum match ${tabType === 'received' ? 'recebido' : 'enviado ou respondido'}.</p>`;
+                    return;
+                }
+                matchTabContentSidebar.innerHTML = '';
+                querySnapshot.forEach(docSnap => {
+                    const req = { id: docSnap.id, ...docSnap.data() };
+                    const reqDiv = document.createElement('div');
+                    reqDiv.className = 'bg-accent-dark p-2 rounded-md border border-border-color-dark text-xs';
+                    let相手 = tabType === 'received' ? (req.senderNickname || 'Alguém') : (req.receiverUsername || req.receiverNickname || 'Destinatário');
+                    let gameInfo = req.games ? req.games.join(', ') : (req.game || 'Jogo não especificado');
+
+                    reqDiv.innerHTML = `
+                        <p class="font-semibold text-text-primary-light">${tabType === 'received' ? 'De:' : 'Para:'} <span class="text-neon-blue">${相手}</span> ${req.status === 'pending_suggestion' && tabType === 'sent' ? '(Sugestão)' : ''}</p>
+                        <p class="text-xxs text-text-secondary-light">Jogo(s): ${gameInfo}</p>
+                        <p class="text-xxs text-text-placeholder">${formatFirestoreTimestamp(req.timestamp)} - Status: ${req.status.replace('_', ' ')}</p>
+                        ${tabType === 'received' && req.status === 'pending' ? `
+                            <div class="mt-1.5 space-x-1.5">
+                                <button class="btn-neon btn-neon-fill text-xxs py-0.5 px-1.5 accept-match-btn" data-id="${req.id}">Aceitar</button>
+                                <button class="btn-neon btn-neon-outline text-xxs py-0.5 px-1.5 decline-match-btn" data-id="${req.id}">Recusar</button>
+                            </div>
+                        ` : ''}
+                         ${tabType === 'sent' && (req.status === 'pending' || req.status === 'pending_suggestion') ? `
+                            <button class="mt-1.5 btn-neon btn-neon-outline text-xxs py-0.5 px-1.5 cancel-match-btn" data-id="${req.id}">Cancelar</button>
+                        ` : ''}
+                    `;
+                    if (tabType === 'received' && req.status === 'pending') {
+                        reqDiv.querySelector('.accept-match-btn')?.addEventListener('click', () => handleMatchAction(req.id, 'accepted'));
+                        reqDiv.querySelector('.decline-match-btn')?.addEventListener('click', () => handleMatchAction(req.id, 'declined'));
+                    }
+                    if (tabType === 'sent' && (req.status === 'pending' || req.status === 'pending_suggestion')) {
+                        reqDiv.querySelector('.cancel-match-btn')?.addEventListener('click', () => handleMatchAction(req.id, 'cancelled_by_sender'));
+                    }
+                    matchTabContentSidebar.appendChild(reqDiv);
+                });
+
+            } catch (error) {
+                console.error(`Erro ao carregar matches ${tabType}:`, error);
+                matchTabContentSidebar.innerHTML = `<p class="text-xs text-neon-red text-center py-2">Erro ao carregar.</p>`;
+            }
+        }
+
+        async function handleMatchAction(matchId, newStatus) {
+            if (!db || !currentUser) return;
+            const matchRef = doc(db, `artifacts/${appIdFromHost}/public/data/match_requests/${matchId}`);
+            try {
+                await updateDoc(matchRef, { status: newStatus, updatedAt: serverTimestamp() });
+                console.log(`Match ${matchId} status atualizado para ${newStatus}`);
+                const activeTabButton = document.querySelector('#match-area-section-sidebar .match-tab-button-sidebar.active');
+                if (activeTabButton) {
+                    loadMatchRequests(activeTabButton.dataset.tab);
+                }
+            } catch (error) {
+                console.error(`Erro ao atualizar status do match ${matchId}:`, error);
+                alert("Erro ao processar ação do match.");
+            }
+        }
+
+        if (matchTabButtonsSidebar.length > 0) {
+            matchTabButtonsSidebar.forEach(button => {
+                button.addEventListener('click', () => {
+                    matchTabButtonsSidebar.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    loadMatchRequests(button.dataset.tab);
+                });
+            });
+            // Ensure a tab is active on load
+            const activeTab = Array.from(matchTabButtonsSidebar).find(btn => btn.classList.contains('active'));
+            if (!activeTab && matchTabButtonsSidebar[0]) {
+                matchTabButtonsSidebar[0].classList.add('active');
+                loadMatchRequests(matchTabButtonsSidebar[0].dataset.tab);
+            } else if (activeTab) {
+                loadMatchRequests(activeTab.dataset.tab);
+            }
+        }
+
+        // --- Communities Logic ---
+        const createCommunityBtn = document.getElementById('create-community-btn');
+        const createCommunityModal = document.getElementById('create-community-modal');
+        const closeCreateCommunityModalBtn = document.getElementById('close-create-community-modal');
+        const cancelCreateCommunityBtn = document.getElementById('cancel-create-community-button');
+        const createCommunityForm = document.getElementById('create-community-form');
+        const communityNameInput = document.getElementById('community-name-input');
+        const communityDescriptionTextarea = document.getElementById('community-description-textarea');
+        const saveCommunityButton = document.getElementById('save-community-button');
+        const createCommunityErrorMessage = document.getElementById('create-community-error-message');
+        const communitiesListContainer = document.getElementById('communities-list-container');
+        const communitiesLoadingPlaceholder = document.getElementById('communities-loading-placeholder');
+
+        const communityDetailsModal = document.getElementById('community-details-modal');
+        const closeCommunityDetailsModalBtn = document.getElementById('close-community-details-modal');
+        const modalCommunityName = document.getElementById('modal-community-name');
+        const modalCommunityDescription = document.getElementById('modal-community-description');
+
+        function setActiveNavItem(targetNav) {
+            document.querySelectorAll('header nav .navbar-item').forEach(item => item.classList.remove('active'));
+            if (targetNav) targetNav.classList.add('active');
+        }
+
+        if (navComunidadesLink) {
+            navComunidadesLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNavItem(navComunidadesLink);
+                feedContentArea.classList.add('hidden');
+                if (leftSidebar) leftSidebar.classList.add('hidden');
+                if (rightSidebar) rightSidebar.classList.add('hidden');
+                communitiesSection.classList.remove('hidden');
+                if (mainContentArea) {
+                    mainContentArea.classList.remove('lg:grid-cols-4');
+                    mainContentArea.classList.add('lg:grid-cols-1'); // Make communities section take full width
+                }
+                loadCommunities();
+            });
+        }
+
+        if (navInicioLink) {
+            navInicioLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                setActiveNavItem(navInicioLink);
+                communitiesSection.classList.add('hidden');
+                feedContentArea.classList.remove('hidden');
+                if (leftSidebar) leftSidebar.classList.remove('hidden');
+                if (rightSidebar) rightSidebar.classList.remove('hidden');
+                if (mainContentArea) {
+                    mainContentArea.classList.remove('lg:grid-cols-1');
+                    mainContentArea.classList.add('lg:grid-cols-4');
+                }
+            });
+        }
+        if (navJogosLink) { // Ensure "Jogos" also shows the feed view
+            navJogosLink.addEventListener('click', (e) => {
+                // e.preventDefault(); // Original preventDefault is there
+                setActiveNavItem(navJogosLink); // Set "Jogos" as active
+                communitiesSection.classList.add('hidden');
+                feedContentArea.classList.remove('hidden');
+                if (leftSidebar) leftSidebar.classList.remove('hidden');
+                if (rightSidebar) rightSidebar.classList.remove('hidden');
+                if (mainContentArea) {
+                    mainContentArea.classList.remove('lg:grid-cols-1');
+                    mainContentArea.classList.add('lg:grid-cols-4');
+                }
+                // Scrolling logic for game catalog is already in script.js
+            });
+        }
+
+
+        if (createCommunityBtn) {
+            createCommunityBtn.addEventListener('click', () => {
+                if (!currentUser) {
+                    alert("Você precisa estar logado para criar uma comunidade.");
+                    return;
+                }
+                createCommunityForm.reset();
+                createCommunityErrorMessage.classList.add('hidden');
+                createCommunityModal.classList.add('active');
+            });
+        }
+
+        function closeCreateCommunityModal() {
+            createCommunityModal.classList.remove('active');
+        }
+        if (closeCreateCommunityModalBtn) closeCreateCommunityModalBtn.addEventListener('click', closeCreateCommunityModal);
+        if (cancelCreateCommunityBtn) cancelCreateCommunityBtn.addEventListener('click', closeCreateCommunityModal);
+        if (createCommunityModal) createCommunityModal.addEventListener('click', (e) => {
+            if (e.target === createCommunityModal) closeCreateCommunityModal();
+        });
+
+        if (createCommunityForm) {
+            createCommunityForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser || !currentUserProfile) {
+                    createCommunityErrorMessage.textContent = "Usuário não autenticado.";
+                    createCommunityErrorMessage.classList.remove('hidden');
+                    return;
+                }
+                const name = communityNameInput.value.trim();
+                const description = communityDescriptionTextarea.value.trim();
+
+                if (!name || !description) {
+                    createCommunityErrorMessage.textContent = "Nome e descrição são obrigatórios.";
+                    createCommunityErrorMessage.classList.remove('hidden');
+                    return;
+                }
+                createCommunityErrorMessage.classList.add('hidden');
+                saveCommunityButton.disabled = true;
+                saveCommunityButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Criando...`;
+
+                try {
+                    const communitiesCollectionPath = `artifacts/${appIdFromHost}/public/data/communities`;
+                    await addDoc(collection(db, communitiesCollectionPath), {
+                        name: name,
+                        description: description,
+                        creatorId: currentUser.uid,
+                        creatorNickname: currentUserProfile.nickname,
+                        timestamp: serverTimestamp(),
+                        memberCount: 1, // Initial member is the creator
+                        // posts: [] // Potentially for future in-community posts
+                    });
+                    loadCommunities(); // Refresh list
+                    closeCreateCommunityModal();
+                } catch (error) {
+                    console.error("Erro ao criar comunidade:", error);
+                    createCommunityErrorMessage.textContent = "Erro ao criar. Tente novamente.";
+                    createCommunityErrorMessage.classList.remove('hidden');
+                } finally {
+                    saveCommunityButton.disabled = false;
+                    saveCommunityButton.textContent = "Criar Comunidade";
+                }
+            });
+        }
+
+        async function loadCommunities() {
+            if (!db || !communitiesListContainer || !communitiesLoadingPlaceholder) return;
+            communitiesLoadingPlaceholder.classList.remove('hidden');
+            communitiesListContainer.innerHTML = ''; // Clear previous list before adding placeholder
+            communitiesListContainer.appendChild(communitiesLoadingPlaceholder);
+
+
+            try {
+                const communitiesCollectionPath = `artifacts/${appIdFromHost}/public/data/communities`;
+                const q = query(collection(db, communitiesCollectionPath), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                communitiesLoadingPlaceholder.classList.add('hidden');
+                if (querySnapshot.empty) {
+                    communitiesListContainer.innerHTML = '<p class="text-text-secondary-light col-span-full text-center py-8">Nenhuma comunidade encontrada. Crie a primeira!</p>';
+                    return;
+                }
+                querySnapshot.forEach((doc) => {
+                    const community = { id: doc.id, ...doc.data() };
+                    communitiesListContainer.appendChild(createCommunityCardElement(community));
+                });
+            } catch (error) {
+                console.error("Erro ao carregar comunidades: ", error);
+                communitiesLoadingPlaceholder.classList.add('hidden');
+                communitiesListContainer.innerHTML = '<p class="text-neon-red col-span-full text-center py-8">Erro ao carregar comunidades.</p>';
+            }
+        }
+
+        function createCommunityCardElement(community) {
+            const card = document.createElement('div');
+            card.className = 'community-card'; // Using new CSS class
+            card.innerHTML = `
+                <h4 class="text-xl font-semibold neon-text neon-text-green mb-1 truncate" title="${community.name}">${community.name}</h4>
+                <p class="text-sm text-text-secondary-light mb-3 h-10 overflow-hidden text-ellipsis" title="${community.description}">${community.description.substring(0, 60)}${community.description.length > 60 ? '...' : ''}</p>
+                <p class="text-xs text-text-placeholder mb-3">Criada por: ${community.creatorNickname || 'Desconhecido'}</p>
+                <button class="w-full btn-neon btn-neon-outline text-sm view-community-details-btn" data-id="${community.id}">Ver Detalhes</button>
+            `;
+            card.querySelector('.view-community-details-btn').addEventListener('click', () => {
+                openCommunityDetailsModal(community);
+            });
+            return card;
+        }
+
+        function openCommunityDetailsModal(community) {
+            modalCommunityName.textContent = community.name;
+            modalCommunityDescription.textContent = community.description; // Display full description here
+            communityDetailsModal.classList.add('active');
+        }
+
+        if (closeCommunityDetailsModalBtn) closeCommunityDetailsModalBtn.addEventListener('click', () => communityDetailsModal.classList.remove('active'));
+        if (communityDetailsModal) communityDetailsModal.addEventListener('click', (e) => {
+            if (e.target === communityDetailsModal) communityDetailsModal.classList.remove('active');
+        });
+
+
+        // --- Page Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure feed is shown by default if user is logged in, otherwise auth handles it
+            if (currentUser) {
+                setActiveNavItem(navInicioLink); // Set "Início" active by default
+                communitiesSection.classList.add('hidden');
+                feedContentArea.classList.remove('hidden');
+                if (mainContentArea) {
+                    mainContentArea.classList.remove('lg:grid-cols-1');
+                    mainContentArea.classList.add('lg:grid-cols-4');
+                }
+                if (leftSidebar) leftSidebar.classList.remove('hidden');
+                if (rightSidebar) rightSidebar.classList.remove('hidden');
+            }
+
+
+            populateGameCatalogSidebar();
+            populateCategoryFiltersSidebar();
+            // Initial load of posts & matches is handled by onAuthStateChanged
+        });
+
+    </script>
+</body>
+
+</html>

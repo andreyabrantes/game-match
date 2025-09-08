@@ -1,0 +1,32 @@
+{
+  "Jogos": [
+    {
+      "Id": 1,
+      "Nome": "GTA V",
+      "AnoLancamento": 2015,
+      "Disponivel": false
+    }
+  ],
+  "Membros": [
+    {
+      "Id": 1,
+      "Nome": "Nathan Salles",
+      "Matricula": "06009233"
+    },
+    {
+      "Id": 2,
+      "Nome": "Nathan Salles",
+      "Matricula": "1"
+    }
+  ],
+  "Emprestimos": [
+    {
+      "Id": 1,
+      "JogoId": 1,
+      "MembroId": 1,
+      "DataEmprestimo": "2025-09-08T14:41:10.2116886-03:00",
+      "DataDevolucaoPrevista": "2025-09-22T14:41:10.2117109-03:00",
+      "DataDevolucaoReal": null
+    }
+  ]
+}

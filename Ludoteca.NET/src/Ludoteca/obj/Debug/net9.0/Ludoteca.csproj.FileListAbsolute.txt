@@ -1,0 +1,14 @@
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\Ludoteca.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\Ludoteca.AssemblyInfoInputs.cache
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\Ludoteca.AssemblyInfo.cs
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\Ludoteca.csproj.CoreCompileInputs.cache
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\bin\Debug\net9.0\Ludoteca.exe
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\bin\Debug\net9.0\Ludoteca.deps.json
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\bin\Debug\net9.0\Ludoteca.runtimeconfig.json
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\bin\Debug\net9.0\Ludoteca.dll
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\bin\Debug\net9.0\Ludoteca.pdb
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\Ludoteca.dll
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\refint\Ludoteca.dll
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\Ludoteca.pdb
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\Ludoteca.genruntimeconfig.cache
+C:\Users\veget\OneDrive\Documentos\Ludoteca.NET\src\Ludoteca\obj\Debug\net9.0\ref\Ludoteca.dll

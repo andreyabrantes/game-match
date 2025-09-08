@@ -1,0 +1,12 @@
+========================================
+       RELATÓRIO DA LUDOTECA .NET       
+========================================
+Data de Geração: 08/09/2025 14:46:20
+----------------------------------------
+  Total de Jogos Cadastrados: 1
+  Total de Membros Ativos: 2
+----------------------------------------
+  Empréstimos Ativos no Momento: 1
+  Devoluções em Atraso: 0
+  Valor Total em Multas (Estimado): R$ 0,00
+========================================
